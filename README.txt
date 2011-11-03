@@ -1,4 +1,4 @@
-This is a work in progress, out group final project for EECS 545, Machine Learning.
+This is a work in progress, our group final project for EECS 545, Machine Learning.
 
 To run:
 ./run.sh
