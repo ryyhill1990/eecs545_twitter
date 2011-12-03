@@ -71,32 +71,39 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
 
 # grab all user-date-hashtag pairs <user, date, hashtag>
 A = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
-B = FILTER B BY term MATCHES '(#[^\\s]+)';
-C = FOREACH B GENERATE user, date, hashtag
+B = FILTER A BY term MATCHES '(#[^\\s]+)';
+C = FOREACH B GENERATE user, date, hashtag;
 STORE C INTO 'output/augUserHashUses';
 
 # grab counts of hashtags used by hashtag <hashtag, frequency>
-A = LOAD 'output/julyUserHashUses/part*' USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
+A = LOAD 'output/augUserHashUses/part*' USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
 B = GROUP A BY hashtag;
 C = FOREACH B GENERATE group, COUNT(A) AS hash_count;
 D = ORDER C BY hash_count DESC;
-STORE D INTO 'output/julyTagUseCounts';
+STORE D INTO 'output/augTagUseCounts';
 
 # grabbing co-occurrences of top 200 tags
 #TODO: avoid duplicate co-occurrences
-tag_counts = LOAD 'output/julyTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
 tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
 top_tags = LIMIT tag_counts_ordered 200;
-tag_terms = LOAD 'output/julyTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
 tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
 top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
 ttt_group = GROUP top_tag_tags BY ($0, $1);
-ttt_counts = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
-STORE ttt_counts INTO 'output/julyTop200TagCooccurCounts';
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH tt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER tt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/augTop200TagCooccurCounts';
 
 
-
-
+# grabbing data for use
+cd data
+hadoop fs -copyToLocal output/augUserHashUses/part* augUserHashUses
+tar -czf augUserHashUses.tgz augUserHashUses
+hadoop fs -cat output/augTop200TagCooccurCounts/part* > augTop200TagCooccurCounts.txt 
+tar -czf augTop200TagCooccurCounts.tgz augTop200TagCooccurCounts.txt
 
 
 

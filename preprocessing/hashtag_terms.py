@@ -2,7 +2,7 @@
 import sys
 from nltk.tokenize import WhitespaceTokenizer
 
-BLOCKED_TAGS = ('#fb',)
+BLOCKED_TAGS = ('#fb', '#')
 
 def main(argv):
     # looping over input
