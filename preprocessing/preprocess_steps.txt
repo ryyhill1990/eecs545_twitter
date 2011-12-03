@@ -92,14 +92,15 @@ tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
 top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
 ttt_group = GROUP top_tag_tags BY ($0, $1);
 ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
-ttt_counts = FOREACH tt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
 ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
-ttt_counts_final = ORDER tt_counts_filtered BY toptag, freq DESC; 
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
 STORE ttt_counts_final INTO 'output/augTop200TagCooccurCounts';
 
 
 # grabbing data for use
 cd data
+mkdir augUserHashUses
 hadoop fs -copyToLocal output/augUserHashUses/part* augUserHashUses
 tar -czf augUserHashUses.tgz augUserHashUses
 hadoop fs -cat output/augTop200TagCooccurCounts/part* > augTop200TagCooccurCounts.txt 
