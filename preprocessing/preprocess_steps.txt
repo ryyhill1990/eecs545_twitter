@@ -1,0 +1,93 @@
+# getting all july tweets with hashtags
+A = LOAD '/data/twitter/tweets2009-07.csv' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FILTER A BY post MATCHES '.*#[^\\s]+.*';
+STORE B INTO 'output/julyTaggedTweets';
+
+# preprocess tweets (lowercase, remove odd characters)
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
+     -D mapred.reduce.tasks=0 \
+     -file clean_tweet.py \
+     -mapper clean_tweet.py \
+     -input output/julyTaggedTweets/part* \
+     -output output/julyTaggedTweetsClean
+
+# grab all hashtag -> term pairs <hashtag, term, date, user>
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
+     -D mapred.reduce.tasks=0 \
+     -file hashtag_terms.py \
+     -mapper hashtag_terms.py \
+     -input output/julyTaggedTweetsClean/part* \
+     -output output/julyTagTerms
+
+# grab all user-date-hashtag pairs <user, date, hashtag>
+A = LOAD 'output/julyTaggedTweetsClean/part*' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FOREACH A GENERATE user, date, FLATTEN(TOKENIZE(post)) as token;
+C = FILTER B BY token MATCHES '(#[^\\s]+)';
+STORE C INTO 'output/julyUserHashUses';
+
+# grab counts of hashtags used by hashtag <hashtag, frequency>
+A = LOAD 'output/julyUserHashUses/part*' USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
+B = GROUP A BY hashtag;
+C = FOREACH B GENERATE group, COUNT(A) AS hash_count;
+D = ORDER C BY hash_count DESC;
+STORE D INTO 'output/julyTagUseCounts';
+
+# grabbing co-occurrences of top 200 tags
+#TODO: avoid duplicate co-occurrences
+tag_counts = LOAD 'output/julyTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 200;
+tag_terms = LOAD 'output/julyTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+STORE ttt_counts INTO 'output/julyTop200TagCooccurCounts';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# playground for grabbing co-occurrences of top 200 tags 
+tag_counts = LOAD 'test/tagUseCounts.txt' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 3;
+tag_terms = LOAD 'test/tagTerms.txt' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+jnd = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP jnd BY ($0, $1);
+ttt_counts = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(jnd);
+DUMP ttt_counts;
+
+
+top_tag_tags
+(#fb,#something,2009-01-01 04:04:04,dolan,#fb,309)
+(#fb,#running,2009-01-01 04:04:04,dolan,#fb,309)
+(#lost,#losting,2009-01-01 04:04:04,dolan,#lost,29)
+(#lost,#fb,2009-01-01 04:04:04,dolan,#lost,29)
+
+tag_tags
+(#something,#testing,2009-01-01 04:04:04,adsf)
+(#fb,#something,2009-01-01 04:04:04,dolan)
+(#fb,#running,2009-01-01 04:04:04,dolan)
+(#guest,#going,2009-01-01 04:04:04,dsfa)
+(#lost,#losting,2009-01-01 04:04:04,dolan)
+(#lost,#fb,2009-01-01 04:04:04,dolan)
+
+top_tags
+(#fb,309)
+(#lost,29)
+(#term,30)
+
