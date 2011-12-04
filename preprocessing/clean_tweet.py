@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 import re
-
+from nltk.tokenize import WhitespaceTokenizer
 
 """
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
@@ -33,9 +33,11 @@ def main(argv):
         
         # preserving replies and hashes before removing non-alphanumeric characters
         s = re.sub("[^a-z0-9@# ]", '', s)
-        s = s.strip()
-        if s:
-            print "%s\t%s\t%s" % (date, user, s)
+        s = s.replace('#', ' #')
+        tokens = WhitespaceTokenizer().tokenize(s)
+        if tokens:
+            final_post = ' '.join(tokens)
+            print "%s\t%s\t%s" % (date, user, final_post)
 
     
 if __name__ == '__main__':
