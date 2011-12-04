@@ -2,7 +2,8 @@
 import sys
 from nltk.tokenize import WhitespaceTokenizer
 
-BLOCKED_TAGS = ('#fb', '#')
+BLOCKED_TAGS = ('#fb', '#ff')
+MIN_HASHTAG_LEN = 2
 
 def main(argv):
     # looping over input
@@ -12,14 +13,34 @@ def main(argv):
         line = line.strip()
         date, user, post = line.split('\t', 2)
         
-        post = post.replace('#', ' #')
-        
         tokens = WhitespaceTokenizer().tokenize(post)
-        for i in range(len(tokens)):
-            if tokens[i][0] == '#' and tokens[i] not in BLOCKED_TAGS:
-                for j in range(len(tokens)):
-                    if i != j and tokens[j] not in BLOCKED_TAGS:
-                        print "\t".join((tokens[i], tokens[j], date, user))
+        
+        """
+        token_freq = {}
+        for token in tokens:
+            if token not in token_freq:
+                token_freq[token] = 0
+            token_freq[token] += 1
+        utokens = keys(token_freq)
+        """
+        # getting unique terms
+        utokens = list(set(tokens))
+        
+        num_tokens = len(utokens)
+        for i in range(num_tokens):
+            if (utokens[i][0] == '#' and utokens[i] not in BLOCKED_TAGS
+                    and len(utokens[i]) >= MIN_HASHTAG_LEN):
+                for j in range(num_tokens):
+                    # not pairings w/ self, or blocked tags
+                    if i == j or utokens[j] in BLOCKED_TAGS:
+                        continue
+                    
+                    # not pairing w/ hashtags missing min length
+                    if utokens[j][0] == '#' and len(utokens[j]) < MIN_HASHTAG_LEN:
+                        continue
+                
+                    # including hashtag 
+                    print "\t".join((utokens[i], utokens[j], date, user))
     
 if __name__ == '__main__':
     main(sys.argv)
