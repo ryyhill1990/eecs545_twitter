@@ -51,7 +51,8 @@ August data building
 # getting all august tweets with hashtags
 A = LOAD '/data/twitter/tweets2009-08.csv' 
     USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
-B = FILTER A BY post MATCHES '.*#[^\\s]+.*';
+B = FILTER A BY post MATCHES '.*#[^\\s]+.*'
+    AND SUBSTRING(date, 0, 7) == '2009-08';
 STORE B INTO 'output/augTaggedTweets';
 
 # preprocess tweets (lowercase, remove odd characters)
@@ -70,27 +71,6 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
      -input output/augTaggedTweetsClean/part* \
      -output output/augTagTerms
 
-
-
-# DEBUGGING: grab all 8/15/2009 tweets
-A = LOAD 'output/augTaggedTweets/part*' 
-    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
-B = FILTER A BY SUBSTRING(date, 0, 10) == '2009-08-15';
-STORE B INTO 'output/augTaggedTweets0815';
-
-# DEBUGGING: sort <hashtag, term, date, user> pairs by date, hashtag
-A = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
-B = ORDER A BY date, hashtag;
-STORE B INTO 'output/augTagTermsSort';
-
-# DEBUGGING: grab all 8/15/2009 <hashtag, term, date, user> pairs
-A = LOAD 'output/augTagTermsSort/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
-B = FILTER A BY SUBSTRING(date, 0, 10) == '2009-08-15';
-STORE B INTO 'output/augTagTerms0815';
-
-
-
-
 # grab all user-date-hashtag pairs <user, date, hashtag>
 A = LOAD 'output/augTaggedTweetsClean/part*' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
 B = FOREACH A GENERATE user, date, FLATTEN(TOKENIZE(post)) as token;
@@ -106,22 +86,39 @@ STORE D INTO 'output/augTagUseCounts';
 
 
 
+########### IGNORE #############
+# DEBUGGING: grab <hashtag, term, date, user> for 8/15
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
+     -D mapred.reduce.tasks=0 \
+     -file hashtag_terms.py \
+     -mapper hashtag_terms.py \
+     -input output/augTaggedTweets0815/part* \
+     -output output/augTagTerms0815b
 
-######## BROKEN ###########
-# grab all user-date-hashtag pairs <user, date, hashtag>
-A = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+# DEBUGGING: grab all 8/15/2009 tweets
+A = LOAD 'output/augTaggedTweetsClean/part*' 
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FILTER A BY SUBSTRING(date, 0, 10) == '2009-08-15';
+STORE B INTO 'output/augTaggedTweets0815';
+
+# DEBUGGING: sort <hashtag, term, date, user> pairs by date, hashtag
+A = LOAD 'output/augTagTerms/part*' 
+    USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+B = ORDER A BY date, hashtag;
+STORE B INTO 'output/augTagTermsSort';
+
+# DEBUGGING: grab all 8/15/2009 <hashtag, term, date, user> pairs
+A = LOAD 'output/augTagTerms/part*' 
+    USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+B = FILTER A BY SUBSTRING(date, 0, 10) == '2009-08-15';
+STORE B INTO 'output/augTagTerms0815';
+
+# DEBUGGING: grabbing unique entries
+A = LOAD 'output/augTagTerms0815/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
 B = FILTER A BY term MATCHES '(#[^\\s]+)';
 C = FOREACH B GENERATE user, date, hashtag;
-STORE C INTO 'output/augUserHashUses';
-
-# grab counts of hashtags used by hashtag <hashtag, frequency>
-A = LOAD 'output/augUserHashUses/part*' USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
-B = GROUP A BY hashtag;
-C = FOREACH B GENERATE group, COUNT(A) AS hash_count;
-D = ORDER C BY hash_count DESC;
-STORE D INTO 'output/augTagUseCounts';
-####### END BROKEN ##########
-
+STORE C INTO 'output/augUserHashUses0815';
+######### END IGNORE #############
 
 
 
@@ -167,6 +164,8 @@ hadoop fs -copyToLocal output/augUserHashUses/part* augUserHashUses
 tar -czf augUserHashUses.tgz augUserHashUses
 hadoop fs -cat output/augTop200TagCooccurCounts/part* > augTop200TagCooccurCounts.txt 
 tar -czf augTop200TagCooccurCounts.tgz augTop200TagCooccurCounts.txt
+hadoop fs -cat output/augTop5kTagCooccurCounts/part* > augTop5kTagCooccurCounts.txt 
+tar -czf augTop5kTagCooccurCounts.tgz augTop5kTagCooccurCounts.txt
 
 
 

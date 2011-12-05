@@ -29,14 +29,14 @@ def main(argv):
         num_tokens = len(utokens)
         for i in range(num_tokens):
             if (utokens[i][0] == '#' and utokens[i] not in BLOCKED_TAGS
-                    and len(utokens[i]) >= MIN_HASHTAG_LEN):
+                    and len(utokens[i]) >= (MIN_HASHTAG_LEN+1)):
                 for j in range(num_tokens):
                     # not pairings w/ self, or blocked tags
                     if i == j or utokens[j] in BLOCKED_TAGS:
                         continue
                     
                     # not pairing w/ hashtags missing min length
-                    if utokens[j][0] == '#' and len(utokens[j]) < MIN_HASHTAG_LEN:
+                    if utokens[j][0] == '#' and len(utokens[j]) < (MIN_HASHTAG_LEN+1):
                         continue
                 
                     # including hashtag 
