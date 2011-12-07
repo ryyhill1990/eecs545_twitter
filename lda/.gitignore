@@ -1,0 +1,16 @@
+.DS_Store
+augUserHashUses
+finalClusters
+*.tgz
+*.zip
+*.out
+*.pyc
+aug_uses.txt
+write_training_data.txt
+write_majority_vote.txt
+write_aug_cluster_uses.txt
+test_write_cluster_uses.txt
+aug_user_list.txt
+all_clusters.txt
+test_clusters_write.txt
+test_cluster_map.txt

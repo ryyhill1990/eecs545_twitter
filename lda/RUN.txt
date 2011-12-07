@@ -1,0 +1,33 @@
+To run, do this:
+
+# Get data
+# All these things should be in .gitignore so they
+# don't get added to the git repo.
+wget http://meez02.eecs.umich.edu/static/augUserHashUses.tgz
+tar -zxvf augUserHashUses.tgz
+cat augUserHashUses/part* > aug_uses.txt
+wget [url for finalClusters.zip]
+unzip finalClusters.zip
+cat finalClusters/Cluster* > all_clusters.txt
+
+# Build cpp files
+./make.sh
+
+# Process data
+
+# Writes to aug_user_list.txt
+./get_user_list.out < aug_uses.txt
+
+# Reads from all_clusters.txt and aug_user_list.txt.
+# Writes to test_clusters_write.txt,
+# aug_uses.txt, and write_aug_cluster_uses.txt.
+./read_uses.out
+
+
+# Reads from write_aug_cluster_uses.txt.
+# Writes to write_training_data.txt.
+./get_training_data.out
+
+# Reads from write_training_data.txt.
+# Prints results to standard output.
+./do_lda.py
