@@ -40,15 +40,12 @@ shuffle(data, target)
 corrects = []
 
 cv = KFold(len(data), 10)
-clf = MultinomialNB()
 for train, test in cv:
-	print train
-	print test
 	X_train = [data[i] for i in range(len(data)) if train[i]]
 	X_test = [data[i] for i in range(len(data)) if test[i]]
 	Y_train = [target[i] for i in range(len(target)) if train[i]]
 	Y_test = [target[i] for i in range(len(target)) if test[i]]
-
+	clf = MultinomialNB()
 	print "fitting" 
 	clf.fit(X_train, Y_train)
 	print "fitted"
@@ -57,8 +54,7 @@ for train, test in cv:
 
 	correct = sum(1 for i in range(len(predictions)) if predictions[i] == Y_test[i])
 	correct_pc = correct/float(len(X_test))
-	print correct_pc
+	print 'fold\'s correct %: ', correct_pc
 	corrects.append(correct_pc)
 
-print corrects
-print sum(corrects)/len(corrects)
+print 'average correct % of all folds: ', sum(corrects)/len(corrects)
