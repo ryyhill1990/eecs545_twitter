@@ -1,0 +1,5 @@
+#ffs	#blog	15
+#ffs	#rt	15
+#ffs	#rts	7
+#ffs	#shoutout	5
+#ffs	#follow	5

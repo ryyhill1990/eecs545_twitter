@@ -1,0 +1,4 @@
+#supportmac	#bayday	48
+#supportmac	#uptown	40
+#supportmac	#tabloidburning	33
+#supportmac	#welovemac	14

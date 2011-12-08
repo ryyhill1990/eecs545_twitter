@@ -1,0 +1,12 @@
+#showbiz	#nieuws	4688
+#showbiz	#gossip	2463
+#showbiz	#entertainment	2229
+#showbiz	#nl	2227
+#showbiz	#tv	26
+#showbiz	#media	25
+#showbiz	#celebrity	22
+#showbiz	#cnn	21
+#showbiz	#la	12
+#showbiz	#host	11
+#showbiz	#talkshow	10
+#showbiz	#internet	6

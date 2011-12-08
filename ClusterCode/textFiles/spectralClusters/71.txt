@@ -1,0 +1,16 @@
+android
+app
+apple
+facebook
+friendfacts
+gadgets
+geek
+google
+iphone
+ipod
+japan
+mac
+mobile
+programming
+snowleopard
+software
