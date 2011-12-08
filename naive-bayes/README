@@ -1,0 +1,8 @@
+Running is straightforward
+Get data: 
+wget http://dl.dropbox.com/u/6822279/write_training_data.txt
+
+(This is for the "old data". To generate the new data, you must use Miller's code)
+
+To run the predictor:
+python naive.py write_training_data.txt
