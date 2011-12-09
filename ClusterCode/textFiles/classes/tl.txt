@@ -1,0 +1,9 @@
+#tl	#realestate	117
+#tl	#stl	63
+#tl	#nyc	55
+#tl	#tcot	55
+#tl	#homebuyer	49
+#tl	#mediatours360	46
+#tl	#nycrealestate	44
+#tl	#realtor	39
+#tl	#digguser	6

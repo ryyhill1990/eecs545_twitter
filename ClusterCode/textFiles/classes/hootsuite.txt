@@ -1,0 +1,5 @@
+#hootsuite	#hoot	61
+#hootsuite	#tweetdeck	28
+#hootsuite	#highnote	7
+#hootsuite	#socialmedia	6
+#hootsuite	#tweetie	5

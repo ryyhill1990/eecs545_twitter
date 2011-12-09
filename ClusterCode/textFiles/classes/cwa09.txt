@@ -1,0 +1,17 @@
+#cwa09	#elca	851
+#cwa09	#goodsoil09	77
+#cwa09	#jjj09	25
+#cwa09	#50days	16
+#cwa09	#elcayoungadults	12
+#cwa09	#elcayouth	12
+#cwa09	#elcanews	12
+#cwa09	#elm	11
+#cwa09	#womenoftheelca	11
+#cwa09	#lgbt	9
+#cwa09	#upstatenysynod	9
+#cwa09	#dcsynod	8
+#cwa09	#catholic	6
+#cwa09	#cwa11	5
+#cwa09	#ecgc	5
+#cwa09	#aids	5
+#cwa09	#umc	5

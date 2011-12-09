@@ -1,0 +1,10 @@
+#scramble	#psgforbiz	84
+#scramble	#win	21
+#scramble	#competition	20
+#scramble	#samsung	12
+#scramble	#led	10
+#scramble	#rubberduckworld	7
+#scramble	#tv	7
+#scramble	#apple	6
+#scramble	#mac	6
+#scramble	#imac	5
