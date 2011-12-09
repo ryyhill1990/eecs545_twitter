@@ -1,7 +1,0 @@
-#kijiji	#pets	2986
-#kijiji	#jobs	1802
-#kijiji	#tprci	25
-#kijiji	#roofing	25
-#kijiji	#timothy	25
-#kijiji	#olx	10
-#kijiji	#ebay	10

@@ -1,7 +1,0 @@
-cloud
-firefox
-hardware
-linux
-microsoft
-opensource
-windows

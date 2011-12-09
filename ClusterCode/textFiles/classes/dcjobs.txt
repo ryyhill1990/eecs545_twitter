@@ -1,4 +1,0 @@
-#dcjobs	#job	3046
-#dcjobs	#hiring	2206
-#dcjobs	#jobs	842
-#dcjobs	#dc	840

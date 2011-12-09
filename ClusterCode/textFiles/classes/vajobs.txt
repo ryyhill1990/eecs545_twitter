@@ -1,4 +1,0 @@
-#vajobs	#job	2722
-#vajobs	#hiring	2271
-#vajobs	#va	626
-#vajobs	#jobs	592

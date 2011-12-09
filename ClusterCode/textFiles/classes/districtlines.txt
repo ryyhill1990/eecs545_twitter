@@ -1,7 +1,0 @@
-#districtlines	#whentwitterwasdown	105
-#districtlines	#flywithme	15
-#districtlines	#mappack3	12
-#districtlines	#district	7
-#districtlines	#iranelection	6
-#districtlines	#welovekevinjonas	6
-#districtlines	#redsox	5

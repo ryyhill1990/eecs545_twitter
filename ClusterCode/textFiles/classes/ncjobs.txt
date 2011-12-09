@@ -1,6 +1,0 @@
-#ncjobs	#job	4972
-#ncjobs	#hiring	3169
-#ncjobs	#joco	1274
-#ncjobs	#jobs	529
-#ncjobs	#nc	529
-#ncjobs	#asp	9

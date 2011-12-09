@@ -1,8 +1,0 @@
-#holmes	#movie	17
-#holmes	#sherlockholmes	13
-#holmes	#sherlock	10
-#holmes	#trailer	9
-#holmes	#realgenius	8
-#holmes	#doyle	7
-#holmes	#bradpitt	7
-#holmes	#10	6

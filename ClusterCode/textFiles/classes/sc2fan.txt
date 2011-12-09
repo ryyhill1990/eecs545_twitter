@@ -1,5 +1,0 @@
-#sc2fan	#starcraft	22
-#sc2fan	#blizzcon	17
-#sc2fan	#scfan	12
-#sc2fan	#sc2	8
-#sc2fan	#starcraft2	6

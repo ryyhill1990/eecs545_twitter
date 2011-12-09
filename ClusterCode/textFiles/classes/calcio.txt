@@ -1,5 +1,0 @@
-#calcio	#notizie	2239
-#calcio	#acmilan	11
-#calcio	#freemediave	10
-#calcio	#football	9
-#calcio	#seriea	7
