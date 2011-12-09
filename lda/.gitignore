@@ -12,5 +12,10 @@ write_aug_cluster_uses.txt
 test_write_cluster_uses.txt
 aug_user_list.txt
 all_clusters.txt
-test_clusters_write.txt
 test_cluster_map.txt
+all_tags.txt
+all_uses.txt
+*.dSYM
+filtered_uses.txt
+julyAug
+short_tags.txt

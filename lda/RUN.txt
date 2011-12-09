@@ -1,14 +1,29 @@
+Interesting files are:
+test_clusters_write.txt -- list of all clusters and the items in them
+cluster_map.txt -- mapping from tags onto their best-fit cluster using 0.5 similarity threshold
+cluster_map_65.txt -- mapping using .65 similarity threshold instead of 0.5
+
 To run, do this:
 
 # Get data
 # All these things should be in .gitignore so they
 # don't get added to the git repo.
-wget http://meez02.eecs.umich.edu/static/augUserHashUses.tgz
-tar -zxvf augUserHashUses.tgz
-cat augUserHashUses/part* > aug_uses.txt
+wget [url for UserHashUses.tgz]
+tar -zxvf UserHashUses.tgz
+cat julyAug/UserHashUses/part* > all_uses.txt
 wget [url for finalClusters.zip]
 unzip finalClusters.zip
 cat finalClusters/Cluster* > all_clusters.txt
+wget [url for TagUseCounts.tgz]
+tar -zxvf TagUseCounts.tgz
+
+# Filters tags with < 5 uses
+./read_tags.py < julyAug/TagUseCounts.txt > all_tags.txt
+
+# Filters uses that don't have tags with < 5 uses
+# Reads from all_tags.txt, all_uses.txt.
+# Writes to filtered_uses.txt.
+./filter_uses.py > filtered_uses.txt
 
 # Build cpp files
 ./make.sh
@@ -16,13 +31,14 @@ cat finalClusters/Cluster* > all_clusters.txt
 # Process data
 
 # Writes to aug_user_list.txt
-./get_user_list.out < aug_uses.txt
+# DEPRECATED
+# ./get_user_list.out < filtered_uses.txt
 
-# Reads from all_clusters.txt and aug_user_list.txt.
+# Reads from all_clusters.txt, and all_tags.txt.
 # Writes to test_clusters_write.txt,
-# aug_uses.txt, and write_aug_cluster_uses.txt.
+# all_uses.txt, all_cluster_uses.txt,
+# tag_map.txt, cluster_map.txt.
 ./read_uses.out
-
 
 # Reads from write_aug_cluster_uses.txt.
 # Writes to write_training_data.txt.
