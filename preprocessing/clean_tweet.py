@@ -32,7 +32,7 @@ def main(argv):
         s = re.sub(r"((http://|www)[^\s]+)|(\w+(\.com|\.edu|\.net)([^\s]+)?)|(\w+\.\w+/\w+([^\s]+)?)", '', s)
         
         # preserving replies and hashes before removing non-alphanumeric characters
-        s = re.sub("[^a-z0-9@# ]", '', s)
+        s = re.sub("[^a-z0-9# ]", '', s)
         s = s.replace('#', ' #')
         tokens = WhitespaceTokenizer().tokenize(s)
         if tokens:
