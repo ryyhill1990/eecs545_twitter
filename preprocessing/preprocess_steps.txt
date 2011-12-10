@@ -72,17 +72,235 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
      -output output/augTagTerms
 
 # grab all user-date-hashtag pairs <user, date, hashtag>
-A = LOAD 'output/augTaggedTweetsClean/part*' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+A = LOAD 'output/augTaggedTweetsClean/part*' 
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
 B = FOREACH A GENERATE user, date, FLATTEN(TOKENIZE(post)) as token;
-C = FILTER B BY token MATCHES '(#[^\\s]+)';
+C = FILTER B BY token MATCHES '(#[^\\s]+)' AND SIZE(token) > 2
+    AND token != '#fb' AND token != '#ff';
 STORE C INTO 'output/augUserHashUses';
 
 # grab counts of hashtags used by hashtag <hashtag, frequency>
-A = LOAD 'output/augUserHashUses/part*' USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
+A = LOAD 'output/augUserHashUses/part*' 
+    USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
 B = GROUP A BY hashtag;
 C = FOREACH B GENERATE group, COUNT(A) AS hash_count;
 D = ORDER C BY hash_count DESC;
 STORE D INTO 'output/augTagUseCounts';
+
+# grabbing co-occurrences of top 200 tags
+tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 200;
+tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/augTop200TagCooccurCounts';
+
+# top 600
+tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 600;
+tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/augTop600TagCooccurCounts';
+
+# top 1000
+tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 1000;
+tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/augTop1kTagCooccurCounts';
+
+# top 2k
+tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 2000;
+tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/augTop2kTagCooccurCounts';
+
+# grabbing co-occurrences of top 5000 tags
+tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 5000;
+tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/augTop5kTagCooccurCounts';
+
+
+# grabbing data for use
+cd data
+mkdir augUserHashUses
+hadoop fs -copyToLocal output/augUserHashUses/part* augUserHashUses
+tar -czf augUserHashUses.tgz augUserHashUses
+hadoop fs -cat output/augTagUseCounts/part* > augTagUseCounts.txt
+tar -czf augTagUseCounts.tgz augTagUseCounts.txt
+hadoop fs -cat output/augTop200TagCooccurCounts/part* > augTop200TagCooccurCounts.txt 
+tar -czf augTop200TagCooccurCounts.tgz augTop200TagCooccurCounts.txt
+hadoop fs -cat output/augTop5kTagCooccurCounts/part* > augTop5kTagCooccurCounts.txt 
+tar -czf augTop5kTagCooccurCounts.tgz augTop5kTagCooccurCounts.txt
+
+
+
+
+
+
+
+
+
+
+##########################################################
+################## JULY + AUG DOWNLOADS ##################
+# getting all august tweets with hashtags
+A = LOAD 'twitter/'
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FILTER A BY post MATCHES '.*#[^\\s]+.*'
+    AND (SUBSTRING(date, 0, 7) == '2009-07' OR SUBSTRING(date, 0, 7) == '2009-08');
+STORE B INTO 'output/julyAug/TaggedTweets';
+
+# preprocess tweets (lowercase, remove odd characters)
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
+     -D mapred.reduce.tasks=0 \
+     -file clean_tweet.py \
+     -mapper clean_tweet.py \
+     -input output/julyAug/TaggedTweets/part* \
+     -output output/julyAug/TaggedTweetsClean
+
+# grab all hashtag -> term pairs <hashtag, term, date, user>
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
+     -D mapred.reduce.tasks=0 \
+     -file hashtag_terms.py \
+     -mapper hashtag_terms.py \
+     -input output/julyAug/TaggedTweetsClean/part* \
+     -output output/julyAug/TagTerms
+
+# grab all user-date-hashtag pairs <user, date, hashtag>
+A = LOAD 'output/julyAug/TaggedTweetsClean/part*' 
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FOREACH A GENERATE user, date, FLATTEN(TOKENIZE(post)) as token;
+C = FILTER B BY token MATCHES '(#[^\\s]+)' AND SIZE(token) > 2
+    AND token != '#fb' AND token != '#ff';
+STORE C INTO 'output/julyAug/UserHashUses';
+
+# grab counts of hashtags used by hashtag <hashtag, frequency>
+A = LOAD 'output/julyAug/UserHashUses/part*' 
+    USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
+B = GROUP A BY hashtag;
+C = FOREACH B GENERATE group, COUNT(A) AS hash_count;
+D = ORDER C BY hash_count DESC;
+STORE D INTO 'output/julyAug/TagUseCounts';
+
+# grabbing co-occurrences of top 200/600/1000/2000/5000 tags
+tag_counts = LOAD 'output/julyAug/TagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
+top_tags = LIMIT tag_counts_ordered 200;
+tag_terms = LOAD 'output/julyAug/TagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
+top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
+ttt_group = GROUP top_tag_tags BY ($0, $1);
+ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
+ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
+ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
+ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
+STORE ttt_counts_final INTO 'output/julyAug/Top200TagCooccurCounts';
+
+# grabbing 100k tweets
+A = LOAD 'output/julyAug/TaggedTweetsClean/part*' 
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = LIMIT A 100000;   
+STORE B INTO 'output/julyAug/100kTweets';
+
+# list of distinct terms in first 100k tweets
+A = LOAD 'output/julyAug/100kTweets/part*' 
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+C = FOREACH B GENERATE FLATTEN(TOKENIZE(post)) as token;
+D = DISTINCT C;
+STORE D INTO 'output/julyAug/uniqueTerms';
+
+# grabbing all term ids for 100k tweets
+hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
+     -D mapred.reduce.tasks=0 \
+     -file tweet_terms.txt \
+     -file tweet_terms_mapper.py \
+     -mapper tweet_terms_mapper.py \
+     -input output/julyAug/100kTweets/part* \
+     -output output/julyAug/100kTweetTerms
+
+
+
+
+# grabbing julyAug data
+mkdir -p julyAug/UserHashUses
+hadoop fs -copyToLocal output/julyAug/UserHashUses/part* julyAug/UserHashUses
+tar -czf julyAug/UserHashUses.tgz julyAug/UserHashUses
+hadoop fs -cat output/julyAug/TagUseCounts/part* > julyAug/TagUseCounts.txt
+tar -czf julyAug/TagUseCounts.tgz julyAug/TagUseCounts.txt
+hadoop fs -cat output/julyAug/Top200TagCooccurCounts/part* > julyAug/Top200TagCooccurCounts.txt 
+tar -czf julyAug/Top200TagCooccurCounts.tgz julyAug/Top200TagCooccurCounts.txt
+hadoop fs -cat output/julyAug/Top600TagCooccurCounts/part* > julyAug/Top600TagCooccurCounts.txt 
+tar -czf julyAug/Top600TagCooccurCounts.tgz julyAug/Top600TagCooccurCounts.txt
+hadoop fs -cat output/julyAug/Top1kTagCooccurCounts/part* > julyAug/Top1kTagCooccurCounts.txt 
+tar -czf julyAug/Top1kTagCooccurCounts.tgz julyAug/Top1kTagCooccurCounts.txt
+hadoop fs -cat output/julyAug/Top2kTagCooccurCounts/part* > julyAug/Top2kTagCooccurCounts.txt 
+tar -czf julyAug/Top2kTagCooccurCounts.tgz julyAug/Top2kTagCooccurCounts.txt
+hadoop fs -cat output/julyAug/Top5kTagCooccurCounts/part* > julyAug/Top5kTagCooccurCounts.txt 
+tar -czf julyAug/Top5kTagCooccurCounts.tgz julyAug/Top5kTagCooccurCounts.txt
+
+#BLUSTER COPY
+mkdir -p ~/data/mlproj/julyAug/UserHashUses
+cd ~/data/mlproj
+cp -r ~/hdfs/output/julyAug/UserHashUses/part* julyAug/UserHashUses
+tar -czf julyAug/UserHashUses.tgz julyAug/UserHashUses
+cat ~/hdfs/output/julyAug/TagUseCounts/part* > julyAug/TagUseCounts.txt
+tar -czf julyAug/TagUseCounts.tgz julyAug/TagUseCounts.txt
+cat ~/hdfs/output/julyAug/Top200TagCooccurCounts/part* > julyAug/Top200TagCooccurCounts.txt 
+tar -czf julyAug/Top200TagCooccurCounts.tgz julyAug/Top200TagCooccurCounts.txt
+cat ~/hdfs/output/julyAug/Top600TagCooccurCounts/part* > julyAug/Top600TagCooccurCounts.txt 
+tar -czf julyAug/Top600TagCooccurCounts.tgz julyAug/Top600TagCooccurCounts.txt
+cat ~/hdfs/output/julyAug/Top1kTagCooccurCounts/part* > julyAug/Top1kTagCooccurCounts.txt 
+tar -czf julyAug/Top1kTagCooccurCounts.tgz julyAug/Top1kTagCooccurCounts.txt
+cat ~/hdfs/output/julyAug/Top2kTagCooccurCounts/part* > julyAug/Top2kTagCooccurCounts.txt 
+tar -czf julyAug/Top2kTagCooccurCounts.tgz julyAug/Top2kTagCooccurCounts.txt
+cat ~/hdfs/output/julyAug/Top5kTagCooccurCounts/part* > julyAug/Top5kTagCooccurCounts.txt 
+tar -czf julyAug/Top5kTagCooccurCounts.tgz julyAug/Top5kTagCooccurCounts.txt
+cat ~/hdfs/output/100kTweetTerms/part* > julyAug/100kTweetTerms.txt
+tar -czf julyAug/100kTweetTerms.tgz julyAug/100kTweetTerms.txt
+
+
+
+
+
+
 
 
 
@@ -119,62 +337,6 @@ B = FILTER A BY term MATCHES '(#[^\\s]+)';
 C = FOREACH B GENERATE user, date, hashtag;
 STORE C INTO 'output/augUserHashUses0815';
 ######### END IGNORE #############
-
-
-
-
-
-# grabbing co-occurrences of top 200 tags
-#TODO: avoid duplicate co-occurrences
-tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
-tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
-top_tags = LIMIT tag_counts_ordered 200;
-tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
-tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
-top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
-ttt_group = GROUP top_tag_tags BY ($0, $1);
-ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
-ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
-ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
-ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
-STORE ttt_counts_final INTO 'output/augTop200TagCooccurCounts';
-
-
-# grabbing co-occurrences of top 5000 tags
-#TODO: avoid duplicate co-occurrences
-tag_counts = LOAD 'output/augTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
-tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
-top_tags = LIMIT tag_counts_ordered 5000;
-tag_terms = LOAD 'output/augTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
-tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
-top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
-ttt_group = GROUP top_tag_tags BY ($0, $1);
-ttt_counts_tmp = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
-ttt_counts = FOREACH ttt_counts_tmp GENERATE $0 AS toptag, $1 AS cotag, $2 AS freq;
-ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
-ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
-STORE ttt_counts_final INTO 'output/augTop5kTagCooccurCounts';
-
-
-
-# grabbing data for use
-cd data
-mkdir augUserHashUses
-hadoop fs -copyToLocal output/augUserHashUses/part* augUserHashUses
-tar -czf augUserHashUses.tgz augUserHashUses
-hadoop fs -cat output/augTop200TagCooccurCounts/part* > augTop200TagCooccurCounts.txt 
-tar -czf augTop200TagCooccurCounts.tgz augTop200TagCooccurCounts.txt
-hadoop fs -cat output/augTop5kTagCooccurCounts/part* > augTop5kTagCooccurCounts.txt 
-tar -czf augTop5kTagCooccurCounts.tgz augTop5kTagCooccurCounts.txt
-
-
-
-
-
-
-
-
-
 
 
 
