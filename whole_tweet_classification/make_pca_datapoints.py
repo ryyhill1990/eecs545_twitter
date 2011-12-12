@@ -30,10 +30,10 @@ cluster_types = (
 test_ratio = 0.1
 
 classifier_classes = (
-        GaussianNB,
-        MultinomialNB,
+#        GaussianNB,
+#        MultinomialNB,
         BernoulliNB,
-        LDA
+        LDA,
         )
 
 
@@ -60,34 +60,6 @@ def make_terms_map():
         terms_map.append(line.strip())
     return terms_map
 
-# Reads each line form the tweets file and
-# writes a line to the long datapoint file.
-# Writes using a new mapping, also writing
-# a new index file.
-def make_long_datapoints(terms_map, stopwords):
-    # Maps strings onto new term indexes
-    new_terms_map = {}
-    with open(log_file, 'w') as log:
-        with open(long_datapoint_file, 'w') as f:
-            with open(long_mapping_file, 'w') as m:
-                for line in open(tweets_file):
-                    tokens = line.split()
-                    terms = [terms_map[int(term)] for term in tokens[3].split(',') if terms_map[int(term)] not in stopwords]
-                    tags = [terms_map[int(term)] for term in tokens[4].split(',')]
-                    for term in terms:
-                        if not term in new_terms_map:
-                            new_terms_map[term] = len(new_terms_map)
-                            m.write(term + '\n')
-                            # For debugging
-                            log.write(str(len(new_terms_map) - 1) + ' ' + term + '\n')
-                    write_line = ' '.join([str(new_terms_map[term]) for term in terms] + tags)
-                    f.write(write_line + '\n')
-                    # For debugging
-                    log.write(line)
-                    log.write(' '.join(terms) + ' ')
-                    log.write(' '.join(tags) + '\n')
-                    log.write(write_line + '\n\n')
-
 # Does nothing for now.
 def make_pca_datapoints(terms_map, stopwords, clusters):
 	new_terms_map = {}
@@ -109,7 +81,7 @@ def make_pca_datapoints(terms_map, stopwords, clusters):
 		for point in cur_vector:
 			data[(count, point)] += 1
 		count += 1
-	pca = RandomizedPCA (n_components=50)
+	pca = RandomizedPCA (n_components=100)
 	transformed_data = pca.fit_transform(data) 
 	
 	xs = []
@@ -127,18 +99,18 @@ def make_pca_datapoints(terms_map, stopwords, clusters):
 
 def accuracy(predict_y, test_y):
         correct = sum(1 for i in range(len(predict_y)) if predict_y[i] == test_y[i])
-	print 'Number of accurate items: ', correct
+#	print 'Number of accurate items: ', correct
 	return correct / float(len(predict_y))
 
 def do_real_classification(train_x, train_y, test_x, test_y, classifier_class):
-    print 'Doing classification with ', str(classifier_class)
+#    print 'Doing classification with ', str(classifier_class)
     classifier = classifier_class()
     classifier.fit(train_x, train_y)
-    print 'Fit classifier'
+#    print 'Fit classifier'
     predict_y = classifier.predict(test_x)
-    print 'Did prediction'
+#    print 'Did prediction'
     predict_accuracy = accuracy(predict_y, test_y)
-    print 'Prediction accuracy:', predict_accuracy
+#    print 'Prediction accuracy:', predict_accuracy
     return predict_accuracy    
 
 def do_classification(xs, ys, cluster_type):
@@ -147,12 +119,12 @@ def do_classification(xs, ys, cluster_type):
         test_indexes = range(num_datapoints)
         shuffle(test_indexes)
         test_indexes = test_indexes[:num_testing]
-        print 'Found test indexes'
+#        print 'Found test indexes'
         train_x, train_y, test_x, test_y = split_data(xs, ys, test_indexes)
         del xs
         del ys
         del test_indexes
-        print 'Split testing and training data'
+#        print 'Split testing and training data'
         for classifier_class in classifier_classes:
             accuracy = do_real_classification(train_x, train_y, test_x, test_y, classifier_class)
 	    print 'Classifier ',classifier_class, ' cluster set ', cluster_type, ' accuracy ', accuracy 
@@ -178,14 +150,14 @@ def split_data(xs, ys, test_indexes):
 def main():
 	stopwords = make_stopwords()
 	terms_map = make_terms_map()
-	print 'Made terms map'
+#	print 'Made terms map'
 	for cluster_type in cluster_types:
 		cluster_type_name = cluster_type[0]
-		print 'Current cluster type: ', cluster_type_name
+#		print 'Current cluster type: ', cluster_type_name
 		clusters = read_clusters(cluster_type_name)
-		print 'Read clusters'
+#		print 'Read clusters'
 		xs, ys = make_pca_datapoints(terms_map, stopwords, clusters)
-		print 'Reduced data dimensions'
+#		print 'Reduced data dimensions'
 		do_classification(xs, ys, cluster_type)				
 	
 
