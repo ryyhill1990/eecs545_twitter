@@ -300,9 +300,12 @@ cat ~/hdfs/output/julyAug/Top2kTagCooccurCounts/part* > julyAug/Top2kTagCooccurC
 tar -czf julyAug/Top2kTagCooccurCounts.tgz julyAug/Top2kTagCooccurCounts.txt
 cat ~/hdfs/output/julyAug/Top5kTagCooccurCounts/part* > julyAug/Top5kTagCooccurCounts.txt 
 tar -czf julyAug/Top5kTagCooccurCounts.tgz julyAug/Top5kTagCooccurCounts.txt
+
 cat ~/hdfs/output/julyAug/100kTweetTerms/part* > julyAug/100kTweetTerms.txt
 tar -czf julyAug/100kTweetTerms.tgz julyAug/100kTweetTerms.txt
 
+cat ~/hdfs/output/julyAug/100kTweetTermsRand/part* > julyAug/100kTweetTermsRand.txt
+tar -czf julyAug/100kTweetTerms.tgz julyAug/100kTweetTerms.txt
 
 
 17,706,485
