@@ -16,8 +16,8 @@ tweets_w_id = STREAM tweets THROUGH rand_id_adder
           
 -- sorting results and returning just ngram and correlation
 all_rand_tweets = ORDER tweets_w_id by id;
-100k_rand_tweets = LIMIT all_rand_tweets 100000;
-rand_tweets = FOREACH 100k_rand_tweets GENERATE date, user, post;
+limit_rand_tweets = LIMIT all_rand_tweets 100000;
+rand_tweets = FOREACH limit_rand_tweets GENERATE date, user, post;
 
 
 -- list of distinct terms in first 100k tweets
