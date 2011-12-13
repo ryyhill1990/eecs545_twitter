@@ -1,0 +1,408 @@
+\documentclass[preprint,12pt]{elsarticle}
+%\documentclass{amsart}
+\usepackage{graphicx}
+\usepackage{subfigure}
+%\usepackage[nobysame]{amsrefs} % load package to handle bibliography
+\usepackage{amssymb}
+
+\journal{Journal of Theoretical Biology}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Extending the IP$_3$ Receptor Model to Include Competition with Partial Agonists }
+\author{Gregory A. Handy} 
+\address{handy1@umbc.edu\\ Department of Mathematics and Statistics,\\ University of Maryland Baltimore County}
+\author{Bradford E. Peercy$^a$} 
+\address{$^a$ corresponding author\\ bpeercy@umbc.edu\quad W:  410-455-2436\\ Fax:  410-455-1066\\ 1000 Hilltop Circle,\\ Department of Mathematics and Statistics,\\ University of Maryland Baltimore County\\ Baltimore, MD 21250}
+
+%\thispagestyle{empty} 
+%\maketitle
+%\newpage
+\begin{abstract}
+The inositol 1,4,5-trisphosphate (IP$_3$) receptor is a Ca$^{2+}$ channel located in the endoplasmic reticulum and is regulated by IP$_3$ and Ca$^{2+}$. In 1992, De Young and Keizer created an eight-state, nine-variable model of the IP$_3$ receptor (Young, Keizer, 1992). In their model, they accounted for three binding sites, a site for IP$_3$, activating Ca$^{2+}$, and deactivating Ca$^{2+}$. The receptor is only open if IP$_3$ and activating Ca$^{2+}$ is bound. Li and Rinzel followed up this paper in 1994 by introducing a reduction that made it into a two variable system. A recent publication by Rossi et al. in 2009 studied the effect of introducing IP$_3$-like molecules, referred to as partial agonists, into the cell (Rossi, 2009). Initial results suggest a competitive model, where IP$_3$ and partial agonists fight for the same binding site. We extend the original eight-state model to a twelve-state model in order to illustrate this competition, and perform a similar reduction to that of Li and Rinzel. Using this reduction we solve for the equilibrium open probability of the model. We then replicated graphs provided by the Rossi paper, and find that while the model misses some of the quantitative measures it captures key qualitative characteristics. Using the model we can suggest biophysical reasons for the mismatch. We then plug the reduced model into a full cell model, in order to analyze the effects partial agonists have on the propagation of calcium waves in two dimensions.
+\end{abstract}
+%\maketitle
+
+\begin{keyword}
+
+inositol-trisphosphate receptor \sep mathematical model \sep multi-state model \sep calcium wave \sep bifurcation diagram
+
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+In this section we provide background about the original IP$_3$ model produced by De Young and Keizer, as well as the reduction performed by Li and Rinzel. After discussing related works that use this model in a full cell simulation, we discussed data collected by Rossi et al. that suggest the model should be extended to account for competitive partial agonists.
+\subsection{The Original Model and Reduction}
+The inositol 1,4,5-trisphosphate (IP$_3$) receptor is a Ca$^{2+}$ channel located in the endoplasmic reticulum and is regulated by IP$_3$ and Ca$^{2+}$. In 1992, De Young and Keizer created an eight state, nine variable model of this system \cite{young}. In their model, they accounted for three binding sites, a site for IP$_3$, activating Ca$^{2+}$, and deactivating Ca$^{2+}$. They used the notation s$_{ijk}$, where $i$, $j$ and $k$ are either 1, if the binding site is occupied, or 0, if its not. The $i$ placeholder corresponds to the IP$_3$ binding site, the $j$ placeholder is for activating Ca$^{2+}$, and the $k$ placeholder is for the deactivating Ca$^{2+}$. The receptor subunit is considered open if IP$_3$ and activating Ca$^{2+}$  is bound (the $s_{110}$ state). 
+
+Li and Rinzel followed up this paper in 1994 by introducing a reduction that reduced the nine variable system to a two variable system \cite{li}. They did this primarily by identifying the binding rates involving the IP$_3$ and activating Ca$^{2+}$  molecules as faster rates than the binding rate of deactivating Ca$^{2+}$. This allowed them to essentially split the model into two halves, with and without deactivating Ca$^{2+}$ bound. 
+
+\subsection{Related Work}
+The model developed by De Young and Keizer has been used has corner stone for modeling the IP$_3$ receptor, and there has only been a few recent modifications applied to the model in order to unlock further understanding of the the IP$_3$ receptor and its in role calcium dynamics. Most recently, Gin et al. created several different Markov chain models based on single-channel data in order to understand better how the concentration of calcium effects the rate constant between states \cite{single1}, \cite{single2}. In this paper we focus solely on steady-state data, which makes the De Young-Keizer model the ideal model to extend.
+
+Bugrim et al., as well as Tang et al., examined calcium waves in a random spatially discrete medium \cite{bug}, \cite{tang}. Both of these papers describe models of calcium flux in Xenopus oocytes, and choose to represent the active ER membrane by using the De Young-Keizer model. In these papers the focus is on the success or failure of a calcium wave, as a result of IP$_3$ concentration. Their use of the De Young-Keizer model made their spatial model an appropriate choice to use in order to see the effects PA has on calcium on the full cell level.
+
+\subsection{Competitive Model}
+In recent experiments Rossi et al. studied the effect of introducing IP$_3$-like molecules into the cell \cite{rossi}. Rossi et al. call these molecules partial agonists, which refers to their possibly reduced ability to activate the receptor. These molecules are able to bind to the IP$_3$ site, but do not open the channel as effectively as the original IP$_3$ molecule; thus PA (a partial agonist) converts less binding energy into conformational change. This is correlated with their ability to bind to the receptor with greater affinity. The model suggested by these conditions is clearly competitive, as IP$_3$ and PA are attempting to bind to the same site. The model created by De Young and Keizer can be straightforwardly extended. Maintaining the original s$_{ijk}$ notation, we now include an option of -1 in the first position to represent the fact that a PA is bound to the IP$_3$ site. The 12-state diagram including the binding of PA is shown in Figure \ref{fig:fullMod}. 
+
+%\begin{figure}[tbh]
+%\centering
+%\includegraphics[scale=0.33]{Figures/fullMod.pdf}
+%\caption{Diagram of the full competitive model. Each bar represents a reversible reaction. The middle plane of four states have IP$_3$ not bound. Transition from the middle plane to the top plane or bottom plane represents binding IP$_3$ or PA, respectively. Transition from the front plane to the back plane represents binding calcium in the activating position. Transition from left plane of states to the right plane represents inactivating calcium binding. The original model consisted of the top 8 states of the diagram.}
+%\label{fig:fullMod}
+%\end{figure}
+
+\section{Methods}
+In this section we provide the details in performing the new reduction of the competitive model. There is also a detailed discussion on finding and understanding the new open probability equation for this model, and it ends with an outline of the experimental parameters used in the model.
+\subsection{Reduction on the Competitive Model}
+In order to perform their reduction, Li and Rinzel made several key assumptions about the rate constants in the model \cite{li}. Similar assumptions can be made for this extended model. In the original reduction, it was noticed that the binding rates of IP$_3$ and of activating calcium are much faster than the binding rate of deactivating calcium. The results found by Rossi suggest that the binding rate of PA can also be grouped into the fast category. This allows us to separate a population of receptors into the following two receptor states (represented in the diagram as the left and right plane of states, respectively).  
+\begin{eqnarray}
+	y &=& s_{000} + s_{010} + s_{100} + s_{110} + s_{-100} +s_{-110},   \label{eqn:y}\\
+	1-y &=& s_{001} + s_{011} + s_{101} + s_{111} + s_{-101} +s_{-111}. \label{eqn:1-y}
+\end{eqnarray}
+
+By using the law of mass action, it is possible to write down the differential equation that  represents each state. We assume that all of the fast processes, the states on either the left or right planes of the diagram, are in quasi-equilibrium. By using the grouping outlined in Equations (1) and (2), we then use the law of conservation to eliminate one of the state equations from each group completely. This leaves us with two five equation systems, each with five unknowns. It is therefore possible to solve for each state in terms of $y$. Below are two examples, where the $K$'s are provided and correspond to the equilibrium dissociation constant for each reaction (see appendix for details),
+\begin{eqnarray}
+	s_{110} &=& \frac{[Ca^{2+}][IP_3]K_{PA}y}{(K_{Ca^{2+}}+[Ca^{2+}])([PA]K_{IP_3}+[IP_3]K_{PA}+K_{PA}K_{IP_3})},   \label{eqn:s110}\\
+	s_{-110} &=& \frac{[Ca^{2+}][PA]K_{IP_3}y}{(K_{Ca^{2+}}+[Ca^{2+}])([PA]K_{IP_3}+[IP_3]K_{PA}+K_{PA}K_{IP_3})}.   \label{eqn:s-110}
+\end{eqnarray}
+
+Examining the first equation above, we see a very important property: If the concentration of the partial agonist goes to zero, this equation can be simplified to the same reduction that Li and Rinzel found \cite{li}.   
+ 
+\subsection{The Equilibrium Open Probability Equation}
+\label{subsec:eq_open_prob}
+Applying the law of mass action to the reactions associated with the transition from the left plane of states to the right plane of states, it is possible to find a differential equation for $y$. Substituting the equations for each state, we can create an equation for $y$ that only depends on the concentrations of Ca$^{2+}$, IP$_3$, PA and $y$ itself. Taking this a step further, it is possible to write $dy/dt$ in the following form
+\begin{eqnarray}
+	\frac{dy}{dt} &=& \frac{y^{\infty}([Ca^{2+}],[IP_3],[PA])-y}{\tau([Ca^{2+}],[IP_3],[PA])}.  \label{eqn:dydt}
+\end{eqnarray}
+
+This form is useful because it provides us with the equilibrium form of $y$, which can then be used in the equilibrium open probability equation. In the De Young and Keizer model, the equilibrium open probability was  
+\begin{eqnarray}
+	(s^{\infty}_{110})^3 &=& \frac{[IP_3][Ca^{2+}]y^{\infty}}{(K_{IP_3}+[IP_3])(K_{[Ca^{2+}]}+[Ca^{2+}])}. \nonumber \
+\end{eqnarray}   
+
+Aside from changing the equation for $s_{110}$ in this model to account for PA reducing the number of IP$_3$ bound open states, we must also take into consideration the $s_{-110}$ state, since this PA-bound state might also allow the flow of calcium, even if it is at a lower rate. We assume that IP$_3$ or PA can combine to each of three subunits in the IP$_3$ receptor. This results in the release percentage of the entire IP$_3$ receptor being
+\begin{eqnarray}
+    s_O &=& (s^{\infty}_{110}+\gamma s^{\infty}_{-110})^3,  \label{eqn:sO} 	
+\end{eqnarray}   
+where 0 $\leq \gamma \leq$ 1 represents the effectivness of the PA bound receptor subunit at conducting calcium ions (we assume PA bound receptor is never more effective). It is our prediction that the release due to PA is about 10\% that of IP$_3$ ($\gamma =$ 0.1), due to the orientation of steady state curves as compared to data in Figure \ref{fig:Rossi2a}.
+
+\subsection{Experimental Parameters}
+Once the $s_{ijk}$ equations in the model are found, it is necessary to write them in terms of dissociation constants, instead of individual binding and unbinding rates, in order to compare with the Rossi et al. data. This simplification has been done for Equations (\ref{eqn:s110}) and (\ref{eqn:s-110}). The rate $K_{PA}$ is the unbinding rate of PA divided by the binding rate of PA. This rate was found in Table 1 of the Rossi et al. paper \cite{rossi}. The binding, $K_{01}$, and unbinding rates, $K_{02}$, of deactivating Ca$^{2+}$ when PA is already bound were picked so that their dissociation constant was approximately the same as if IP$_3$ was bound. This value and the other rates not from Rossi et al. were taken directly from the original study done by De Young and Keizer \cite{young}. The values of the new constants can be found in Table \ref{tab:new}.
+
+%\begin{table}[ht]
+%\caption{New Constants} % title of Table
+%\centering % used for centering table
+%\begin{tabular}{c c} % centered columns (4 columns)
+%\hline\hline %inserts double horizontal lines
+%Constant & Value \\ [0.5ex] % inserts table
+%%heading
+%\hline % inserts single horizontal line
+%$K_{PA}$ & .00045 $\mu$M \\ % inserting body of the table
+%$K_{01}$ & .01 * [Ca$^{2+}$] $\mu$M$^{-1}$s$^{-1}$ \\
+%$K_{02}$ & .01 s$^{-1}$\\ [1ex] % [1ex] adds vertical space
+%\hline %inserts single line
+%\end{tabular}
+%\label{tab:new} % is used to refer this table in the text
+%\end{table}
+
+\section{Results}
+In this section we compare the model with data in two experimental graphs produced by Rossi et al. \cite{rossi}. The first experiment examined the effect the concentration each agonist had on the Ca$^{2+}$ release percentage, without the other agonist present in the cell. The second varied the concentration of only IP$_3$, except now a small amount of PA (.0001 $\mu$ M) was present in the cell before the introduction of IP$_3$.
+\subsection{Calcium Release due to only IP$_3$ or only PA}
+Rossi et al. found that the partial agonists stimulated calcium release at lower concentrations than IP$_3$. They identify one of their molecules, $(IP_3)_2$, as the most potent inositol phosphate-based agonist. In order to test our model to this idea, we plotted the open probability for a system (Equation (\ref{eqn:sO}) taking $\gamma$ to be 0.1) scaled by the maximum open probability for the relative conditions. Figure \ref{fig:Rossi2a}a provided is Supplementary Figure 1b in the Rossi et al. paper \cite{rossi}. 
+
+%\begin{figure}[tbh]
+%\centering
+%\subfigure[]{
+%\includegraphics[scale=0.5]{Figures/ip3ORpaRossi.pdf}
+%}
+%\subfigure[]{
+%\includegraphics[scale=0.25]{Figures/IP3orPA.pdf}
+%}
+%\caption{Partial Agonist More Potent at Opening Calcium Channels. Lower concentration of partial agonist will induce calcium release in experiments (a) and in the model (b). Figure \ref{fig:Rossi2a}a is from Rossi et al. Supplementary Figure 1b.}
+%\label{fig:Rossi2a}
+%\end{figure}
+
+The graph produced by our model clearly illustrates the fact that a lower concentration of PA is required to trigger the release of calcium, than IP$_3$. However, it should be noted that the amount of calcium released by PA and IP$_3$ is not equivalent. The graphs were scaled according to the maximum amount of calcium that is released for each molecule to compare with what was done in the experiments. The gap between the two curves is greater for the model than for the data. Upon closer examination, the curve corresponding to PA matches up closely with the data, while the curve corresponding to IP$_3$ is less sensitive than the data suggests. This is maybe accounted for in the $K_{IP_3}$ constant, which was taken unaltered from De Young and Keizer. Decreasing $K_{IP_3}$ will shift the $IP_3$ curve leftward. 
+
+\subsection{Calcium Release of IP$_3$ vs. PA and IP$_3$}
+
+Due to the fact that PA binds with a greater affinity than IP$_3$, it is able to beat out IP$_3$ and bind to the receptor, even if it has a lower concentration. Remembering that PA releases less concentration of calcium, these two facts cause a shift of the calcium release curve of IP$_3$ to the right when a concentration PA is present (i.e. more IP$_3$ is necessary to achieve the same level of release with PA than without PA). This is illustrated in both the data and the model.
+
+%\begin{figure}[tbh]
+%\centering
+%\subfigure[]{
+%\includegraphics[scale=0.5]{Figures/ip3ANDpaRossi.pdf}
+%}
+%\subfigure[]{
+%\includegraphics[scale=0.25]{Figures/IP3andPA.pdf}
+%}
+%\caption{In Presence of Partial Agonist More $IP_3$ Required for Same Release. a) Experimental data along with the line of best fit. b) Results of the model. The blue line represents the release of $[Ca^{2+}]$ with PA (.0001 $\mu M$) and IP$_3$, and the red line is the release with only IP$_3$. Figure \ref{fig:Rossi3a}a is taken from Rossi et al. Figure 2c.}
+%\label{fig:Rossi3a}
+%\end{figure}
+
+Even though a shift is illustrated in the model, the gap between the two lines is smaller than the data would suggest.  It is possible to shift the PA line to the right by decreasing the $K_{PA}$ constant. However, maintaining this constant and going back to Figure 2b, the PA-only line has shifted to the left. 
+
+\subsection{Placement into a Full Cell Model}
+In 1997, Bugrim modeled calcium dynamics in the Xenopus oocytes with the following full cell model
+
+\begin{eqnarray}
+	\frac{\partial C}{\partial t} &=& D_{eff} \nabla^2C+ [P_l + P_c J_{IP_3}(I,C,(1-v))](C_R-C) - \frac{P_pC^2}{C^2+K_C^2} \nonumber \\
+	\frac{\partial v}{\partial t} &=& \frac{v^{\infty}(C,I)-v}{\tau(C,I)} \nonumber \
+\end{eqnarray}
+where C is the Ca$^{2+}$ concentration in the cytosol, I is the IP$_3$ concentration, $C_R$ is the Ca$^{2+}$ concentration in the ER, and $v$ is the fraction of inhibited channels \cite{bug}. J$_{IP_3}$ is the flux through the IP$_3$ receptor, and is a function of IP$_3$, C, and activation of the gate (1-v). C$_m$ is defined in paper as average Ca$^{2+}$ concentration and is given by the formula, $(C+\lambda C_r)/(1+\lambda)$. This value is held fixed at 1.56$\mu$M. Values and definitions for $D_{eff}$, $P_l$, $P_p$, $P_c$, and $K_C$ can be found in Table \ref{tab:def}.
+
+A simplified De Young-Keizer model is used in Bugrim et al. for $J_{IP_3}$, as well as the $v^{inf}$ and $\tau$ terms as functions of C and I. Therefore only a simple substitution is needed to plug in the extended IP$_3$ Receptor mode (Equations (5) and (6)) into this full cell structure, J$_{IP_3}$=s$_O$. Before going into the spatial simulation of the system, we focus first on the bifurcation analysis of a spatially uniform cell (i.e. $\nabla^2$C=0).
+
+%\begin{table}[ht]
+%\caption{Full Model Constants} % title of Table
+%\centering % used for centering table
+%\begin{tabular}{c c r} % centered columns
+%\hline\hline %inserts double horizontal lines
+%Constant & Definition & Value \\ [0.5ex] % inserts table
+%%heading
+%\hline % inserts single horizontal line
+%\\
+%$D_{eff}$ & Effective diffusion coefficient & 0.21 $\mu$m$^2$s$^{-1}$ \\ % inserting body of the table
+%$P_l$ & Leakage rate constant & 0.00059 s$^{-1}$ \\ % inserting body of the table
+%$P_c$ & Maximum Channel conductance rate & 3.7 s$^{-1}$ \\
+%$P_p$ & Maximum pump rate & 10.0 $\mu$M$^{-1}$s$^{-1}$ \\
+%$K_C$ & Michaelis constant for the pump & 0.03  $\mu$M$^{-1}$ \\ [1ex] % [1ex] adds vertical space
+%\hline %inserts single line
+%\end{tabular}
+%\label{tab:def} % is used to refer this table in the text
+%\end{table}
+
+\subsection{Bifurcation Analysis}
+Examining the extended model without PA, if the level of IP$_3$ is low, there exists a unique low steady state for Ca$^{2+}$. Increasing IP$_3$, however, Ca$^{+2}$ goes through a subcritical Hopf bifurcation at $IP_3$ =  .03368 $\mu$M, and into a large amplitude stable oscillation. Further increase in IP$_3$ causes calcium to transition through a second Hopf bifurcation regaining the unique stready state, but now at a high level. This subcritical bifurcation structure is effectively maintianed for increasing levels of PA, but becoming right shifted. Table \ref{tab:hopf} shows the values of the lower and upper Hopf bifurcation points corresponding to these diagrams. Figure \ref{fig:bif} shows bifurcation diagrams of IP$_3$ for the different PA levels.
+
+%\begin{table}[ht]
+%\caption{Hopf Points} % title of Table
+%\centering % used for centering table
+%\begin{tabular}{r r r} % centered columns
+%\hline\hline %inserts double horizontal lines
+%PA & IP$_3$ for Lower Hopf & IP$_3$ for Higher Hopf \\ [0.5ex] % inserts table
+%%heading
+%\hline % inserts single horizontal line
+%\\
+%0 $\mu$M &  0.03368 $\mu$M & 0.3207 $\mu$M \\ % inserting body of the table
+%0.0001$\mu$M  &  0.03944 $\mu$M & 0.3272 $\mu$M \\ % inserting body of the table
+%0.001 $\mu$M & 0.09023 $\mu$M & 0.3840 $\mu$M \\
+%0.01 $\mu$M & 0.57420 $\mu$M & 0.8940 $\mu$M \\
+%0.1 $\mu$M & $>$4 $\mu$M &  \\ [1ex] % [1ex] adds vertical space
+%\hline %inserts single line
+%\end{tabular}
+%\label{tab:hopf} % is used to refer this table in the text
+%\end{table}
+
+%\begin{figure}[tbh]
+%\centering
+%\includegraphics[scale=0.40]{Figures/finalHopf.pdf}
+%\caption{Hopf bifurcation diagrams IP$_3$ vs. Ca$^{2+}$ for different values of PA.}
+%\label{fig:bif}
+%\end{figure}
+
+Based on our competitive structure, and our assumption that Ca$^{2+}$ transport is less when PA is bound, these results match our intution. As we saw before, when PA and IP$_3$ are both present, they are competing for the same binding spot, and due to PA's ability to bind with greater affinity than IP$_3$, it will be able to bind to the receptor over IP$_3$. As a result, the effect of the $J_{IP_3}$ term will diminish in the presence of PA. Accordingly, the calcium dynamics will be dominated by the pump and calcium will be lower in the cytosol for low concentrations of IP$_3$. This is illustrated in a low steady state value. Once the concentration of IP$_3$ has increased to a suitable level to conquer PA, the $J_{IP_3}$ flux will have a larger role in the calcium dynamics. This in turn will lead to oscillations, and as the concentration IP$_3$ increases further, it will settle on a higher stable steady state. Thus, we see the Hopf diagram shift to the right as PA increases. However, we note that this graph is not scale invarient with respect to PA level, as we can see by the fact that substituting in IP$_3$/PA for IP$_3$ does not remove the PA dependence. 
+
+Figure \ref{fig:bif} also illustrates a region of overlapping steady states around the lower Hopf bifurcation point. Even though the region is quiet small with no PA, it becomes noticable when PA $=$ 0.01 $\mu$M. In order to capture this, we plotted the limit points, as well as the Hopf bifurcation points, in a graph of IP$_3$ against PA. This can be seen in Figure \ref{fig:2par}. Upon further investigation, it was revealed that the calcium dynamics actually change as PA increases. For small PA the periodic orbits emanating out of the lower and upper Hopf bifurcation join, but as PA increases this connection breaks and the curve of orbits from each Hopf bifurcation ends in a homoclinic bifurcation.  When PA is large enough the Bogdanov-Takens bifurcation eliminates the lower Hopf bifurcation altogether. This can be seen in Figure \ref{fig:Zoomed}. This point is further evidence that the model is not invariant in terms of IP$_3/$PA. As PA concentration increases we notice that the area of potential bistability increases as well.
+
+%\begin{figure}[tbh]
+%\centering
+%\includegraphics[scale=0.3]{Figures/finalHopfandLimit.pdf}
+%\caption{Hopf bifurcation points IP$_3$ vs. PA. The dot is the location where the first Hopf point is lost ([PA] $=$ 0.007 $\mu$M and [IP$_3$]$=$ 0.414 $\mu$M).}
+%\label{fig:2par}
+%\end{figure}
+
+\subsection{Wave Propagation with PA}
+In the non-uniform two-dimensional domain, we consider a cell that has dimensions 150 $\mu$m by 150 $\mu$m. The model presented consists of two partial differential equations. To solve this system numerically we apply the centered differencing to the second order spatial term, and taking equal spacing in the spatial term (i.e. $\Delta x=\Delta y$), we convert the pair of equations to a system of ordinary differential equations. We solve this system using MATLAB ode45.
+
+Now consider the following initial condition: a single strip of length 75 $\mu$m having an elevated level of calcium, with the rest of the region in steady state. We take PA to be 0.0 $\mu$M, and 0.0001 $\mu$M. In order for the cell to be in an excitable state, IP$_3$ is set to be 0.03 $\mu$M in both cases. The concentrations of calcium and open channels at steady state is slightly lower in the presence of PA. Under these conditions we see a Ca$^{2+}$ wave propagate in both situations, however, the one with PA propagates at a slower rate. Increasing the PA to 0.001 $\mu$M, keeping other things constant, fails to propagate a wave. The amount of IP$_3$ in the presence of PA is unable to overcome the diffusive coupling.
+
+%\begin{figure}[tbh]
+%\centering
+%\includegraphics[scale=0.4]{Figures/finalRace.pdf}
+%\caption{Ca$^{2+}$ wave propagation in the $x_2$ direction after 8 seconds at $x$ = 12.5 $\mu$m.}
+%\label{fig:trace}
+%\end{figure}
+
+%\begin{figure}[tbh]
+%\centering
+%\includegraphics[scale=0.4]{Figures/finalContour.pdf}
+%\caption{Contour Plot of the Ca$^{2+}$ Wave After 8 seconds. Concentration of .4 $\mu$M graphed. }
+%\label{fig:contour}
+%\end{figure}
+
+As illustrated by Figure \ref{fig:trace}, after 8 seconds, the calcium wave with a concentration of no PA has propagated just under 125 $\mu$m. However, we see the calcium wave with PA lagging behind, just under the 100 $\mu$m mark after 8 seconds. Figure \ref{fig:contour} emphasizes this fact further, with a two dimensional representation of the wave.
+
+\section{Conclusions and Discussion}
+We have extended a framework from protein level data that may be used to predict whole cell calcium dynamics in the presence of partial agonist. While some of the quantitative values on the release percentage did not match the data, the rate constants used were restricted to previous literature and the experimental values found by Rossi et al. \cite{young},\cite{rossi}. Even with this restriction, there is clearly a qualitative agreement between the data and the model. Also, with the model we are able to predict that the actual calcium release from IP$_3$R bound to PA is about 10\% of IP$_3$ bound to IP$_3$R. 
+
+Further, the extended framework could prove useful in sorting out the effects IP$_3$ and IP$_3$R have on a system in the presence of ryanodine receptors. It has been shown that IP$_3$R receptors and ryanodine receptors control experimentally different time scales at synaptic adaptation \cite{ray}. Applying partial agonists to delineate further their respective roles and utilizing the appropriate model to assist in predictions could prove useful in overcoming innate system complexities.  
+
+Next steps involve examining the binding rate constants measured in the paper in order to investigate the difference in shifts found in the model and in the data. It would also be advantageous to simplify the equilibrium equation for $y$, as this would open up additional insight to the relationship between the different rate constants. We can also further investigate the effect PA might have on spatial dynamics by examining its effect on a spiral wave. 
+
+\section{Appendix}
+Referring back to Figure 1, consider the s$_{000}$ state of the receptor. Using the law of mass action, we can write the rate of change for this state as the following,
+
+\begin{eqnarray}
+	\frac{ds_{ijh}}{dt} &=& (-k_{I_+jh}s_{0jh} + k_{I_-jh}s_{1jh}) + (-1)^h(-k_{ij+}s_{ij0}+k_{ij-}s_{ij1}) \nonumber \\ 
+& & + (-1)^j(-k_{i+h}s_{i0h}+k_{i-h}s_{i1h}) + (-k_{P_+jh}s_{0jh}+
+k_{P_-jh}s_{-1jh}). \nonumber \
+\end{eqnarray}
+
+We use the notation $k_{ijk}$ to represent the rate constants for the binding and dissociation of the correct ligands. The ``$+$'' in a certain position refers to the binding of that specific ligand, and a ``$-$'' refers to its dissociation. An I, or P is used in addition to this notation in the first position to signify whether IP$_3$ (I) or a partial agonist (P) is the ligand present. The other two subscripts refer to the state of the receptor.
+
+It is possible to write out similiar differential equations for the remaining eleven states of the model. Using the law of conservation, and the grouping of the states defined in Equations (\ref{eqn:y}) and (\ref{eqn:1-y}) in Section \ref{sec:mehods}, it is possible to eliminate the differential equations associated with states s$_{010}$ and s$_{011}$. 
+
+After this simplification, we have ten remaining equations, with ten unknowns. We assume that the fast processes are in quasi-equilibrium. These are the processes that involve the binding of IP$_3$, PA, and of activating calcium. This allows us to set of up a system of equations to solve for each state in terms of the rate constants and of $y$. This system was solved using the LinearSolve function in Mathematica. The end solutions come to the form as seen in Equations (3) and (4) in Section(2).
+
+We now examine $y$, and the transition from the left plane to the right plane of the model (Figure 1). We can again use the law of mass action to come to the following differential equation,
+
+\begin{eqnarray}
+	\frac{dy}{dt} &=& -(k_{00+}s_{000}+k_{10+}s_{100}+k_{01+}s_{010}+k_{11+}s_{110}+k_{-10+}s_{-100}
++k_{-11+}s_{-110}) \nonumber \\
+& & + (k_{00-}s_{001}+k_{10-}s_{101}+k_{01-}s_{011}+k_{11-}s_{111}+k_{-10-}s_{-101}
++k_{-11-}s_{-111}). \nonumber \
+\end{eqnarray}
+
+Plugging in the equations found for each state, it is then possible to have this depend entirely on $y$ and the rate constants. We then put transform this equation into the form found in Equation (\ref{eqn:dydt}) in Subsection \ref{subsec:eq_open_prob}.
+
+\bibliographystyle{model1-num-names}
+\bibliography{ip3}
+\clearpage
+\listoffigures
+\clearpage
+\begin{table}[ht]
+\caption{New Constants} % title of Table
+\centering % used for centering table
+\begin{tabular}{c c} % centered columns (4 columns)
+\hline\hline %inserts double horizontal lines
+Constant & Value \\ [0.5ex] % inserts table
+%heading
+\hline % inserts single horizontal line
+$K_{PA}$ & .00045 $\mu$M \\ % inserting body of the table
+$K_{01}$ & .01 * [Ca$^{2+}$] $\mu$M$^{-1}$s$^{-1}$ \\
+$K_{02}$ & .01 s$^{-1}$\\ [1ex] % [1ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{tab:new} % is used to refer this table in the text
+\end{table}
+
+\begin{table}[ht]
+\caption{Full Model Constants} % title of Table
+\centering % used for centering table
+\begin{tabular}{c c r} % centered columns
+\hline\hline %inserts double horizontal lines
+Constant & Definition & Value \\ [0.5ex] % inserts table
+%heading
+\hline % inserts single horizontal line
+\\
+$D_{eff}$ & Effective diffusion coefficient & 0.21 $\mu$m$^2$s$^{-1}$ \\ % inserting body of the table
+$P_l$ & Leakage rate constant & 0.00059 s$^{-1}$ \\ % inserting body of the table
+$P_c$ & Maximum Channel conductance rate & 3.7 s$^{-1}$ \\
+$P_p$ & Maximum pump rate & 10.0 $\mu$M$^{-1}$s$^{-1}$ \\
+$K_C$ & Michaelis constant for the pump & 0.03  $\mu$M$^{-1}$ \\ [1ex] % [1ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{tab:def} % is used to refer this table in the text
+\end{table}
+
+\begin{table}[ht]
+\caption{Hopf Points} % title of Table
+\centering % used for centering table
+\begin{tabular}{r r r} % centered columns
+\hline\hline %inserts double horizontal lines
+PA & IP$_3$ for Lower Hopf & IP$_3$ for Higher Hopf \\ [0.5ex] % inserts table
+%heading
+\hline % inserts single horizontal line
+\\
+0 $\mu$M &  0.03368 $\mu$M & 0.3207 $\mu$M \\ % inserting body of the table
+0.0001$\mu$M  &  0.03944 $\mu$M & 0.3272 $\mu$M \\ % inserting body of the table
+0.001 $\mu$M & 0.09023 $\mu$M & 0.3840 $\mu$M \\
+0.01 $\mu$M & 0.57420 $\mu$M & 0.8940 $\mu$M \\
+0.1 $\mu$M & $>$4 $\mu$M &  \\ [1ex] % [1ex] adds vertical space
+\hline %inserts single line
+\end{tabular}
+\label{tab:hopf} % is used to refer this table in the text
+\end{table}
+
+\clearpage
+
+\begin{figure}[tbh]
+\centering
+\includegraphics[scale=0.33]{Figures/fullMod.pdf}
+\caption{Diagram of the full competitive model. Each bar represents a reversible reaction. The middle plane of four states have IP$_3$ not bound. Transition from the middle plane to the top plane or bottom plane represents binding IP$_3$ or PA, respectively. Transition from the front plane to the back plane represents binding calcium in the activating position. Transition from left plane of states to the right plane represents inactivating calcium binding. The original model consisted of the top 8 states of the diagram.}
+\label{fig:fullMod}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\subfigure[]{
+\includegraphics[scale=0.5]{Figures/ip3ORpaRossi.pdf}
+}
+\subfigure[]{
+\includegraphics[scale=0.25]{Figures/IP3orPA.pdf}
+}
+\caption{Partial Agonist More Potent at Opening Calcium Channels. Lower concentration of partial agonist will induce calcium release in experiments (a) and in the model (b). Figure \ref{fig:Rossi2a}a is from Rossi et al. Supplementary Figure 1b.}
+\label{fig:Rossi2a}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\subfigure[]{
+\includegraphics[scale=0.5]{Figures/ip3ANDpaRossi.pdf}
+}
+\subfigure[]{
+\includegraphics[scale=0.25]{Figures/IP3andPA.pdf}
+}
+\caption{In Presence of Partial Agonist More $IP_3$ Required for Same Release. a) Experimental data along with the line of best fit. b) Results of the model. The blue line represents the release of $[Ca^{2+}]$ with PA (.0001 $\mu M$) and IP$_3$, and the red line is the release with only IP$_3$. Figure \ref{fig:Rossi3a}a is taken from Rossi et al. Figure 2c.}
+\label{fig:Rossi3a}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\includegraphics[scale=0.40]{Figures/finalHopf.pdf}
+\caption{Hopf bifurcation diagrams IP$_3$ vs. Ca$^{2+}$ for different values of PA.}
+\label{fig:bif}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\includegraphics[scale=0.3]{Figures/finalHopfandLimit.pdf}
+\caption{Hopf bifurcation points IP$_3$ vs. PA. The dot is the location where the first Hopf point is lost ([PA] $=$ 0.007 $\mu$M and [IP$_3$]$=$ 0.414 $\mu$M).}
+\label{fig:2par}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\subfigure[]{
+\includegraphics[scale=0.25]{Figures/zoom0.pdf}
+}
+\subfigure[]{
+\includegraphics[scale=0.25]{Figures/zoom001.pdf}
+}
+\subfigure[]{
+\includegraphics[scale=0.25]{Figures/zoom01.pdf}
+}
+\caption{A zoomed in look of the lower Hopf bifurcation and limit points for different values of PA.}
+\label{fig:Zoomed}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\includegraphics[scale=0.4]{Figures/finalRace.pdf}
+\caption{Ca$^{2+}$ wave propagation in the $x_2$ direction after 8 seconds at $x$ = 12.5 $\mu$m.}
+\label{fig:trace}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\includegraphics[scale=0.4]{Figures/finalContour.pdf}
+\caption{Contour Plot of the Ca$^{2+}$ Wave After 8 seconds. Concentration of 0.4 $\mu$M graphed. }
+\label{fig:contour}
+\end{figure}
+
+\end{document}
