@@ -10,14 +10,14 @@ DEFINE rand_id_adder `add_rand_id_to_tweet.py`
 tweets = LOAD '/user/dol/output/julyAug/TaggedTweetsClean/part*' 
          AS (date:chararray, user:chararray, post:chararray);
 
--- search results through streaming job (TODO: replace w/ Pig COR()?)
-results = STREAM tweets THROUGH rand_id_adder 
+-- search results through streaming job
+tweets_w_id = STREAM tweets THROUGH rand_id_adder 
           AS (id:chararray, date:chararray, user:chararray, post:chararray);
           
 -- sorting results and returning just ngram and correlation
-sorted = ORDER no_id_results by id;
-sorted_100k = LIMIT no_id_results 100000;
-rand_tweets = FOREACH sorted_100k GENERATE date, user, post;
+all_rand_tweets = ORDER tweets_w_id by id;
+100k_rand_tweets = LIMIT all_rand_tweets 100000;
+rand_tweets = FOREACH 100k_rand_tweets GENERATE date, user, post;
 
 
 -- list of distinct terms in first 100k tweets

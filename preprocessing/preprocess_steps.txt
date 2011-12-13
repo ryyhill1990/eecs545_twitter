@@ -261,7 +261,7 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
 
 
 # generating random tweet data
-pig gen_rand_classify_data.pig
+pig preprocessing/gen_rand_classify_data.pig
 
 
 
