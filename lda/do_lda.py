@@ -47,6 +47,7 @@ def do_majority(x, y):
     return correct
 
 # Removes dimensions that don't have any varience
+# Can be called with test_x and train_x.
 def remove_redundant_dimensions(x, test_x):
     same = False
     for x_point in x:

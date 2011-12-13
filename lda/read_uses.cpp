@@ -236,17 +236,29 @@ vector<string> read_tags(const string &filename) {
 map<string, int> make_final_cluster_map(vector<string> tags,
         const vector<Cluster> &clusters,
         const map<string, vector<int> > &cluster_map,
+
+        // Doesn't include dot-values.
+        map<string, int> &final_cluster_map,
         int &num_dot_clusters_found) {
-    map<string, int> final_map;
+
+    // Includes dot-values
+    map<string, int> final_map_dot;
     int i = 0;
     for (vector<string>::iterator tag = tags.begin(); tag != tags.end(); ++tag) {
-        final_map[*tag] = find_cluster(*tag, clusters, cluster_map, num_dot_clusters_found);
+        int old_num_dots = num_dot_clusters_found;
+        int cluster_value = find_cluster(*tag, clusters, cluster_map, num_dot_clusters_found);
+        if (cluster_value >= 0) {
+            final_map_dot[*tag] = cluster_value;
+            if (num_dot_clusters_found == old_num_dots) {
+                final_cluster_map[*tag] = cluster_value;
+            }
+        }
         ++i;
         if (i % 1000 == 0) {
             cout << i << " / " << tags.size() << endl;
         }
     }
-    return final_map;
+    return final_map_dot;
 }
 
 void write_final_tag_map(const string &filename, const map<string, int> &tag_map) {
@@ -387,24 +399,41 @@ void write_cluster_map(const string &filename, const vector<Cluster> &clusters, 
 }
 
 int main() {
+    vector<string> cluster_types;
+    cluster_types.push_back("spectral");
+    cluster_types.push_back("metis");
+    cluster_types.push_back("norm_spectral");
+
+    // Log file
+    ofstream log;
+    log.open("log_lda.txt");
+
     cout << "Begin" << endl;
     vector<string> tags = read_tags("all_tags.txt");
     cout << "Read tags" << endl;
-    vector<Cluster> clusters = read_clusters("all_clusters.txt");
-    cout << "Read clusters" << endl;
-    write_clusters("test_clusters_write.txt", clusters);
-    cout << "Clusters size " << clusters.size() << endl;
-    map<string, vector<int> > cluster_map = make_cluster_map(clusters);
-    cout << "Made cluster maps, size " << cluster_map.size() << endl;
-    int num_dot_clusters_found = 0;
-    map<string, int> final_cluster_map = make_final_cluster_map(tags, clusters, cluster_map, num_dot_clusters_found);
-    cout << "Made final cluster map, size: " << final_cluster_map.size() << ", num dot clusters: " << num_dot_clusters_found << endl;
-    write_final_tag_map("cluster_map.txt", final_cluster_map);
-    cout << "Wrote final cluster map" << endl;
+    for (vector<string>::const_iterator cluster_type = cluster_types.begin();
+            cluster_type != cluster_types.end(); ++cluster_type) {
+        cout << "Beginning clusters of type " << (*cluster_type) << endl;
+        log << "Beginning clusters of type " << (*cluster_type) << endl;
+        vector<Cluster> clusters = read_clusters((*cluster_type) + "_clusters.txt");
+        cout << "Read clusters" << endl;
+        write_clusters((*cluster_type) + "_indexed_cluster_list.txt", clusters);
+        cout << "Clusters size " << clusters.size() << endl;
+        map<string, vector<int> > cluster_map = make_cluster_map(clusters);
+        cout << "Made cluster maps, size " << cluster_map.size() << endl;
+        int num_dot_clusters_found = 0;
+        map<string, int> final_cluster_map;
+        map<string, int> final_cluster_map_cos = make_final_cluster_map(tags, clusters, cluster_map, final_cluster_map, num_dot_clusters_found);
+        cout << "Made final cluster map, size: " << final_cluster_map.size() << ", num dot clusters: " << num_dot_clusters_found << endl;
+        log << "Num dot clusters: " << num_dot_clusters_found << endl;
+        write_final_tag_map((*cluster_type) + "_cluster_map.txt", final_cluster_map);
+        write_final_tag_map((*cluster_type) + "_cos_cluster_map.txt", final_cluster_map_cos);
+        cout << "Wrote final cluster map" << endl;
+    }
 //    map<string, int> use_counts = read_use_counts("aug_user_list.txt");
 //    cout << "Read use counts, size " << use_counts.size() << endl;
 
-    // TODO enable this
+    // TODO enable this?
     // map<string, vector<vector<int> > > uses = read_uses("filtered_uses.txt", clusters, final_cluster_map /* , use_counts*/ );
     // cout << "Read uses, size " << uses.size() << endl;
     // write_uses("all_cluster_uses.txt", uses);
@@ -412,5 +441,6 @@ int main() {
 
     // write_cluster_map("test_cluster_map.txt", clusters, cluster_map);
     // cout << "Wrote cluster map" << endl;
+    log.close();
     return 0;
 }

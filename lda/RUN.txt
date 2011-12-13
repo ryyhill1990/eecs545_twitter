@@ -1,5 +1,5 @@
 Interesting files are:
-test_clusters_write.txt -- list of all clusters and the items in them
+indexed_cluster_list.txt -- list of all clusters and the items in them
 cluster_map.txt -- mapping from tags onto their best-fit cluster using 0.5 similarity threshold
 cluster_map_65.txt -- mapping using .65 similarity threshold instead of 0.5
 
@@ -35,15 +35,19 @@ tar -zxvf TagUseCounts.tgz
 # ./get_user_list.out < filtered_uses.txt
 
 # Reads from all_clusters.txt, and all_tags.txt.
-# Writes to test_clusters_write.txt,
+# Writes to indexed_cluster_list.txt,
 # all_uses.txt, all_cluster_uses.txt,
 # tag_map.txt, cluster_map.txt.
+# (Actually reads and writes different files now,
+# this file needs to be updated to reflect that.)
 ./read_uses.out
 
 # Reads from write_aug_cluster_uses.txt.
 # Writes to write_training_data.txt.
-./get_training_data.out
+# DEPRECATED
+# ./get_training_data.out
 
 # Reads from write_training_data.txt.
 # Prints results to standard output.
-./do_lda.py
+# DEPRECATED
+# ./do_lda_old.py
