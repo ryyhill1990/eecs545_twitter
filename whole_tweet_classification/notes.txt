@@ -1,0 +1,83 @@
+12-11-2011:
+Learning, cluster type spectral , x type ('raw', 9697) , cos False
+Read clusters
+10000
+20000
+30000
+40000
+50000
+60000
+70000
+Read training datapoints
+Majority class 154 , majority vote accuracy on testing data 0.139760748549 , on all data  0.14126891248
+Doing classification with  <class 'sklearn.svm.sparse.classes.SVC'>
+Num train 75298 , num test 8443
+Fit classifier
+Did prediction
+Logging, made dense matrix
+Logged predictions
+Prediction accuracy: 0.323107900036
+Learning, cluster type spectral , x type ('raw', 9697) , cos True
+Read clusters
+10000
+20000
+30000
+40000
+50000
+60000
+70000
+Read training datapoints
+Majority class 154 , majority vote accuracy on testing data 0.142052637628 , on all data  0.139504653223
+Doing classification with  <class 'sklearn.svm.sparse.classes.SVC'>
+Num train 78228 , num test 8701
+Fit classifier
+Did prediction
+Logging, made dense matrix
+Logged predictions
+Prediction accuracy: 0.309964371911
+Learning, cluster type spectral , x type ('pca', 666) , cos False
+Read clusters
+Traceback (most recent call last):
+  File "./do_classification.py", line 226, in <module>
+      main()
+
+40000
+      50000
+            60000
+                  70000
+                        Read training datapoints
+                              Majority class 154 , majority vote accuracy on testing data 0.141417733523 , on all data  0.14126891248
+                                    Generous majority vote accuracy on testing data 0.146870854938 , on all data 0.132863445903
+                                          Doing classification with  <class 'sklearn.svm.sparse.classes.SVC'>
+                                                Num train 75305 , num test 8436
+                                                      Fit classifier
+                                                            Did prediction
+                                                                  Logging, made dense matrix
+                                                                        Logged predictions
+                                                                              Prediction accuracy: 0.324731701435
+                                                                                    Generous prediction accuracy: 0.324731701435
+                                                                                          Learning, cluster type spectral , x type ('raw', 9697) , cos True
+                                                                                                Read clusters
+                                                                                                      0
+                                                                                                            10000
+                                                                                                                  20000
+                                                                                                                        30000
+                                                                                                                              40000
+                                                                                                                                    50000
+                                                                                                                                          60000
+                                                                                                                                                70000
+                                                                                                                                                      Read training datapoints
+                                                                                                                                                            Majority class 154 , majority vote accuracy on testing data 0.135575589459 , on all data  0.139504653223
+                                                                                                                                                                  Generous majority vote accuracy on testing data 0.14612196566 , on all data 0.13232063441
+                                                                                                                                                                        Doing classification with  <class 'sklearn.svm.sparse.classes.SVC'>
+                                                                                                                                                                              Num train 78277 , num test 8652
+                                                                                                                                                                                    Fit classifier
+                                                                                                                                                                                          Did prediction
+                                                                                                                                                                                                Logging, made dense matrix
+                                                                                                                                                                                                      Logged predictions
+                                                                                                                                                                                                            Prediction accuracy: 0.316992303138
+                                                                                                                                                                                                                  Generous prediction accuracy: 0.316992303138
+                                                                                                                                                                                                                        Learning, cluster type spectral , x type ('pca', 666) , cos False
+                                                                                                                                                                                                                              Read clusters
+                                                                                                                                                                                                                                    Traceback (most recent call last):
+                                                                                                                                                                                                                                            File "./do_classification.py", line 247, in <module>
