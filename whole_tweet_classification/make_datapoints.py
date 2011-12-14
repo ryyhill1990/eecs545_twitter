@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-tweets_file = '100k_tweets.txt'
-terms_file = 'tweet_terms.txt'
+#tweets_file = '100k_tweets.txt'
+#terms_file = 'tweet_terms.txt'
+tweets_file = '100kTweetTermsRand.txt'
+terms_file = 'uniqueTermsRand.txt'
 stopwords_file = 'stopwords.txt'
 
 long_datapoint_file = 'raw_datapoints.txt'

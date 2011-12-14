@@ -5,8 +5,10 @@ from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
 from sklearn.lda import LDA
 from random import shuffle
 
-tweets_file = '100k_tweets.txt'
-terms_file = 'tweet_terms.txt'
+#tweets_file = '100k_tweets.txt'
+#terms_file = 'tweet_terms.txt'
+tweets_file = '100kTweetTermsRand.txt'
+terms_file = 'uniqueTermsRand.txt'
 stopwords_file = 'stopwords.txt'
 
 long_datapoint_file = 'raw_datapoints.txt'
