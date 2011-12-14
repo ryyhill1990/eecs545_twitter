@@ -234,6 +234,8 @@ ttt_counts_filtered = FILTER ttt_counts BY freq >= 5;
 ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC; 
 STORE ttt_counts_final INTO 'output/julyAug/Top200TagCooccurCounts';
 
+
+-------------- NOT USED ANYMORE ---------
 # grabbing 100k tweets
 A = LOAD 'output/julyAug/TaggedTweetsClean/part*' 
     USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
@@ -255,6 +257,11 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
      -mapper tweet_terms_mapper.py \
      -input output/julyAug/100kTweets/part* \
      -output output/julyAug/100kTweetTerms
+---------- NOT USED ANYMORE -------------------
+
+
+# generating random tweet data
+pig preprocessing/gen_rand_classify_data.pig
 
 
 
@@ -293,8 +300,34 @@ cat ~/hdfs/output/julyAug/Top2kTagCooccurCounts/part* > julyAug/Top2kTagCooccurC
 tar -czf julyAug/Top2kTagCooccurCounts.tgz julyAug/Top2kTagCooccurCounts.txt
 cat ~/hdfs/output/julyAug/Top5kTagCooccurCounts/part* > julyAug/Top5kTagCooccurCounts.txt 
 tar -czf julyAug/Top5kTagCooccurCounts.tgz julyAug/Top5kTagCooccurCounts.txt
-cat ~/hdfs/output/100kTweetTerms/part* > julyAug/100kTweetTerms.txt
+
+cat ~/hdfs/output/julyAug/100kTweetTerms/part* > julyAug/100kTweetTerms.txt
 tar -czf julyAug/100kTweetTerms.tgz julyAug/100kTweetTerms.txt
+
+cat ~/hdfs/output/julyAug/100kTweetTermsRand/part* > julyAug/100kTweetTermsRand.txt
+tar -czf julyAug/100kTweetTerms.tgz julyAug/100kTweetTerms.txt
+
+
+17,706,485
+# grabbing count of tweets with hashtags (result: 15,802,895 / 178,411,396)
+A = LOAD 'output/julyAug/TaggedTweetsClean/part*';
+B = GROUP A ALL;
+C = FOREACH B GENERATE COUNT(A);
+DUMP C;
+
+A = LOAD 'twitter/'
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FILTER A BY post MATCHES '.*#[^\\s]+.*'
+    AND (SUBSTRING(date, 0, 7) == '2009-07' OR SUBSTRING(date, 0, 7) == '2009-08');
+STORE B INTO 'output/julyAug/TaggedTweets';
+
+A = LOAD 'twitter/'
+    USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = filter A by INDEXOF(post, '#') != -1
+    AND (SUBSTRING(date, 0, 7) == '2009-07' OR SUBSTRING(date, 0, 7) == '2009-08');
+C = group B all;
+D = foreach C generate COUNT(B);
+DUMP D;
 
 
 
