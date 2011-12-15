@@ -1,0 +1,14 @@
+\section{Future Work}
+
+\subsection{Clustering}
+Although we have shown that our clustering method has promise, there are a number research points that can be explored to improve the method. During part of the preprocessing step, as illustrated in Figure 1, the undirected graph is transformed to a directed graph that has the properties of a Markov chain. It would therefore be possible to perform a Markov Cluster Algorithm as proposed by Dongen \cite{Dongen2000}. It possible that this algorithm would be less effected by noise, which would eliminate the preprocessing step and allow a large number of hashtags to be clustered. Parallelizing the preprocessing step would also allow for this possibility. 
+
+A better way of choosing the number of clusters should also be examined. Further, increasing K was meant to increase the number of topics the clusters represented. However, instead of splitting large clusters apart into smaller topics, it would simply pull one or two hashtags out at a time. This was most likely do to the fact that K-means was always done on the full graph. It would potentially be better to first apply K-means to the whole set, and have K equal a small number. Then for each of these clusters, perform a localized K-means. This method should avoid the issue of creating clusters that are too small in size. 
+
+
+\subsection{Classification/Prediction/What else can we do with this?}
+Future work with classifying and prediction using our cluster data focuses on three areas.  First, 
+
+
+\section{Conclusion}
+In conclusion, we rock.

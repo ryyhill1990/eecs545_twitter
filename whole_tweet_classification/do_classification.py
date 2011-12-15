@@ -15,8 +15,8 @@ cluster_types = (
         )
 
 x_types = (
-        ('raw', 9697), # name, num dimensinos
-        ('pca', 666),
+                ('raw', 46286), # name, num dimensinos
+                #('pca', 666),
         )
 
 classifier_classes = (
@@ -27,7 +27,7 @@ classifier_classes = (
         )
 
 sparse_classifier_classes = (
-        (SVC, 'SVC'),
+        #        (SVC, 'SVC'),
         )
 
 cluster_list_suffix = '_indexed_cluster_list.txt'
@@ -211,7 +211,14 @@ def learn(cluster_type, x_type, test_fraction, use_cos):
     print 'Split testing and training data'
     """
     # Figure out majority vote
-    majority_y = find_majority(train_y)
+    majority_y = find_majority(train_y + test_y)
+
+    test_right = sum(1 for i in range(len(test_y)) if test_y[i] == majority_y)
+    test_size = len(test_y)
+    train_right = sum(1 for i in range(len(train_y)) if train_y[i] == majority_y)
+    train_size = len(train_y)
+
+
     majority_test_accuracy = sum(1 for i in range(len(test_y)) if test_y[i] == majority_y) / float(len(test_y))
     majority_total_accuracy = (sum(1 for i in range(len(train_y)) if train_y[i] == majority_y) + \
             sum(1 for i in range(len(test_y)) if test_y[i] == majority_y)) / float(len(test_y) + len(train_y))
@@ -220,6 +227,13 @@ def learn(cluster_type, x_type, test_fraction, use_cos):
     num_test_points = sum(1 for i in range(len(test_y)) if i == 0 or test_tweet_ids[i] != test_tweet_ids[i-1])
     generous_majority_test_accuracy = sum(1 for i in range(len(test_y)) if majority_y in tweet_categories_map[test_tweet_ids[i]] \
             and (i == 0 or test_tweet_ids[i] != test_tweet_ids[i-1])) / float(num_test_points)
+
+    gen_train_right = sum(1 for i in range(len(train_y)) if majority_y in tweet_categories_map[train_tweet_ids[i]] \
+                        and (i == 0 or train_tweet_ids[i] != train_tweet_ids[i-1]))
+    gen_test_right = sum(1 for i in range(len(test_y)) if majority_y in tweet_categories_map[test_tweet_ids[i]] \
+                        and (i == 0 or test_tweet_ids[i] != test_tweet_ids[i-1]))
+
+
     generous_majority_total_accuracy = (sum(1 for i in range(len(train_y)) if majority_y in tweet_categories_map[train_tweet_ids[i]] \
             and (i == 0 or train_tweet_ids[i] != train_tweet_ids[i-1])) + \
             sum(1 for i in range(len(test_y)) if majority_y in tweet_categories_map[test_tweet_ids[i]] \

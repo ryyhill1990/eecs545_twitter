@@ -1,0 +1,36 @@
+% USAGE: copy contents of this file into abstractTitleIntroRelated.tex 
+
+\begin{abstract}
+While Twitter is full of information, retrieving this information and making sense of it is a non-trivial task and has become a focus in machine learning. We develop two tools that are helpful in in unlocking this information: the clustering of hashtags into meaningful topics, and using these clusters to identify the topic of tweets through the use of classification methods naive Bayes, LDA and SVM. In addition to creating a respectable clustering algorithm, a novel similarity measure is developed that is useful beyond the scope of the methods we examined. Our classification step also illustrates... One Line Here about how cool our classification step is
+
+Keywords: Twitter, hashtag, machine learning, clustering, classification
+\end{abstract}
+
+
+\title{Supervised Classification of Twitter Posts via Unsupervised Clustering of Hashtags \\
+EECS 545 Machine Learning Final Project Proposal}
+\author{Gregory Handy, Dolan Antenucci, Akshay Modi, Miller Tinkerhess} 
+
+\maketitle
+
+
+\section{Introduction}
+Twitter is the leading microblogging social network. It is the ninth most popular site on the Internet with over 200 million registered users producing over 200 million tweets every day \cite{Shiels2011,Alexa2011,Twitter.com2011}. Users post publicly viewable tweets of up to 140 characters in length, and follow other users whose tweets they are interested in receiving. The sheer volume of data produced by Twitter makes it an attractive area of study for machine learning. Unfortunately, many standard algorithms for extracting information from a body of text assume correct English and so are ineffective at analyzing tweets, which often contain slang, acronyms, or incorrect spelling or grammar.
+
+Some words within a tweet are prefixed with punctuation symbols to indicate special meaning. For example, a word prefixed by ``$\#$'' is a hashtag. Hashtags are a way for a user to indicate the subject of a tweet in a way that is easy to search for; hashtags are deliberate metadata. We make the simplifying assumption that a tweet's hashtag content is a good approximation of its total content \cite{Rosa}. We represent each tweet as a vector with one binary dimension for each hashtag in the data set indicating whether or not the tweet contains that hashtag. To simplify the learning problem, we will cluster hashtags into categories and learn over the clusters.
+
+Prediction of a user's future tweet content could be useful in a number of ways. For example, it would allow Twitter to present a customized list of trending topics to each user, allowing them to discover content that is relevant to their interests that they might otherwise not have discovered. Twitter could also present a list of users whose predicted behavior is similar to that of the user, making the assumption that the user might be interested in following those users. Prediction information could also be used to present relevant advertising to a user, thereby increasing click-through rates over non-targeted advertising.
+
+
+
+\section{Related Work}
+The most related work in what we are doing with clustering was done by J. Poschko who focused on clustering of hashtags. He developed the idea that two hashtags are similar if they co-occur in a tweet \cite{Poschko2011}. Based on this idea, he creates a clustered graph with the co-occurrence frequency as the distance measure. We expand upon this idea in our clustering by introducing a novel method for measuring the distance between two hashtags. Additionally, we use a larger set of hashtags and test several clustering methods to instead of focusing on just one. 
+
+In other clustering work involving hashtags, Bode et al. use hashtags to cluster users together via multidimensional scaling and hierarchical cluster analysis \cite{Bode2011}, but only focus on when users are using the same hashtags. Additionally, Carter and Tsagkias use hashtags to build a thesaurus of related terms \cite{Carter2011}. SHOULD WE INCLUDE?? I don’t think so (Greg)
+
+Other work in clustering of text-related entities typically focus on a bag-of-words model that takes all the words of the entity, along with some dimensionality reduction, to make clustering computationally feasible \cite{Karandikar2010,Cheong2010}. This idea has been extended to address the issue of sparsity in tweets by including other words fetched from larger corpuses like Wikipedia, or simply combining several tweets together by a shared attribute such as the tweeter \cite{Zhao2011,Hu2008,Liu2011,Chen2010}. While these methods to address sparsity can help with clustering of tweets, this does not help with clustering of hashtags.
+
+There has been notable research on the classification of tweets in different contexts. One context attempts to classify the sentiments of different tweets, such as the mood or opinion of the tweet \cite{Davidov2010}. This requires a considerable amount of work in analyzing the linguistics of the tweet. Our focus of classifying the topic of the tweet, not the sentiment, will not require this analysis, providing an easier tool to classify, while still producing useful information. 
+
+Additionally, researchers Mazzia and Juett investigated the recommendation of hashtags based on a tweet's content \cite{Mazzia2011}. They used a modified Naive Bayes classifier to aid in their recommendations.  We expand on this idea by recommending hashtag clusters, which allows us to expand our set of supported hashtags.
+

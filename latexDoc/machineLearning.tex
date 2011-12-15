@@ -1,84 +1,43 @@
-\documentclass[12pt]{amsart}
+\documentclass[12pt]{amsart} %amsart
 \usepackage{graphicx}
 \usepackage{subfigure}
-\usepackage[nobysame]{amsrefs} % load package to handle bibliography
 
+% below from
+% http://www.pages.drexel.edu/~pyo22/students/latexRelated/latexTutorial.html
+\topmargin -1.5cm        % read Lamport p.163
+\oddsidemargin -0.04cm   % read Lamport p.163
+\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+\textwidth 16.59cm
+\textheight 21.94cm
+%\pagestyle{empty}       % Uncomment if don't want page numbers
+\parskip 7.2pt           % sets spacing between paragraphs
+%\renewcommand{\baselinestretch}{1.5}  % Uncomment for 1.5 spacing between lines
+\parindent 0pt       % sets leading space for paragraphs
+ 
 
-\title{Supervised Prediction of Twitter Posts with Unsupervised Clustering}
-\author{Gregory Handy, Dolan Antenucci, Akshay Modi, Miller Tinkerhess} 
 
 \begin{document}
-\maketitle
-
-\begin{abstract}
-Abstract goes here
-\end{abstract}
 
 
-\section{Introduction}
-This is the start.
 
-\subsection{Subsection}
+% including title + abstract + maketitle + introduction
+\input{abstractTitleIntroRelated}
 
-%If we want to add a figure this is the code we would use
-%\begin{figure}[tbh]
-%\centering
-%\includegraphics[scale=0.33]{location of figure}
-%\caption{}
-%\label{fig:something}
-%\end{figure}
 
-\section{Clustering Techniques}
+% including solution section 
+\input{ourApproach}
 
-\subsection{Another Subsection}
-Sample equation
-\begin{eqnarray}
-	y &=& s_{000} + s_{010} + s_{100} + s_{110} + s_{-100} +s_{-110},   \nonumber\\
-	1-y &=& s_{001} + s_{011} + s_{101} + s_{111} + s_{-101} +s_{-111}. \label{eqn:1-y}
-\end{eqnarray}
 
- This is how you cite stuff \cite{shiels}.   
+% including experiments section
+\input{experiments}
 
-\begin{bibdiv}
-\begin{biblist}
 
-\bib{shiels}{article}
-{
-  author={Shiels, M.},    % NOTE: Last name must come first!
-  title={Twitter co-founder Jack Dorsey rejoins company},
-  journal={BBC News},
-  date = {28 March 2011},
- eprint = {http://www.fermentas.com/techinfo/nucleicacids/maplambda.htm}
-}
+% including future work, conclusion, references
+\input{futureWorkConclusion} 
 
-\bib{alexa}{article}
-{
-  author={Alexa},    % NOTE: Last name must come first!
-  date = {17 November 2011},
- eprint = {http://www.alexa.com/topsites}
-}
 
-\bib{twitter}{article}
-{
-  author={Twitter.com},    % NOTE: Last name must come first!
-  title = {Your World, More Connected}
-  date = {2011},
- eprint = {http://blog.twitter.com/2011/08/your-world-more-connected.html}
-}
- 
-\bib{mao}{article}{
-  author={Mao, Bollen H.},    % NOTE: Last name must come first!
-  author={Zeng, X.},
-  title={Twitter mood predicts the stock market},
-  journal={Journal of Computational Science},
-  date = {March 2011},
-volume={2},
-number={1},
-pages={1-8}
-}
-
-\end{biblist}
-\end{bibdiv}
+% including references
+\bibliographystyle{abbrv}
+\bibliography{machineLearning} % requires machineLearning.bib file 
 
 \end{document}
- 

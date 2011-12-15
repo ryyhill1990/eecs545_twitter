@@ -1,0 +1,234 @@
+@inproceedings{Bode2011,
+abstract = {Twitter provides a new and important tool for politi- cal actors, and is increasingly being used as such. In the 2010 midterm elections, the vast majority of candidates for the U.S. House of Representatives and virtually all can- didates for U.S. Senate and governorships used Twitter to reach out to potential supporters, direct them to particular pieces of information, request campaign contributions, and mobilize their political action. Despite the level of activity, we have little understanding of what the political Twitter- verse looks like in terms of communication and discourse. This project seeks to remedy that lack of understanding by mapping candidates for federal office in 2010 and their followers, according to their use of the 4016 most used hash- tags (keywords). Our data set is uniquely constructed from tweets of most of the candidates running for the U.S. House of Representatives in 2010, all the candidates for the Senate and governorships, and a random sample of their followers. From this we utilize multidimensional scaling to construct a visual map based on hashtag usage. We find that our data have both local and global interpretations that reflect not only political leaning but also strategies of communi- cation. This study provides insight into innovation in new media usage in political behavior, as well as a snapshot of the political twitterverse in 2010.},
+annote = { - maps political candidates and their real-world-followers via hash tags
+ - looks at hashtags of users to cluster them together, along with weighting},
+author = {Bode, Leticia and Hanna, Alexander and Sayre, Ben and Yang, JungHwan and Shah, Dhavan},
+booktitle = {Networks},
+organization = {Southern Illinois University Carbondale Year},
+pages = {1--25},
+publisher = {University of Wisconsin-Madison},
+title = {{Mapping the Political Twitterverse: Finding Connections Between Political Elites}},
+year = {2011}
+}
+@article{Carter2011,
+abstract = {The popularity of microblogging platforms, such as Twitter, renders them valuable real-time information resources for tracking various aspects of worldwide events, e.g., earthquakes, political elections, etc. Such events are usually characterized in microblog posts via the use of hashtags (). As microbloggers come from different backgrounds, and express themselves in different languages, we witness different translations of hashtags which, however, are about the same event. Language-dependent variants of hashtags can possibly lead to issues in content-analysis. In this paper, we propose a method for translating hashtags, which builds on methods from information retrieval. The method introduced is source and target language independent. Our method is desirable, either instead of, or complimentary, to the direct translation of the hashtag for three reasons. First we return a list of hashtags on the same topic, which takes into account the plurality and variability of hashtags used by microbloggers for assigning posts to a topic. Second, our framework accounts for the problem that microbloggers in different languages will refer to the same topic using different tokens. Finally, our method does not require special preprocessing of hashtags, reducing barriers to real-world implementation. We present proof-of-concept results for the given Spanish hashtag 33mineros.},
+annote = { - hashtag translation via other tweets' text -> query terms - good related work since on hashtags},
+author = {Carter, Simon and Tsagkias, M},
+journal = {Human Factors},
+pages = {1--3},
+publisher = {ACM},
+title = {{Twitter hashtags: Joint Translation and Clustering}},
+url = {http://journal.webscience.org/529/},
+year = {2011}
+}
+@article{Chen2010,
+abstract = {Twitter is one of the fastest growing online social networking services. Tweets can be categorized into trends, and are related with tags and follower/following social relationships. The categorization is neither accurate nor effective due to the short length of tweet messages and noisy data corpus. In this paper, we attempt to overcome these challenges with an extended feature vector along with a semi-supervised clustering technique. In order to achieve this goal, the training set is expanded with Wikipedia topic search result, and the feature set is extended. When building the clustering model and doing the classification, impurity measurement is introduced into our classifier platform. Our experiment results show that the proposed techniques outperform other classifiers with reasonable precision and recall.},
+annote = { - semi supervised clustering of tweets
+ - uses bisecting k-means clustering on tweets
+ - improves upon clustering by searching wikipedia for preprocessed tweet words; then clustering on this
+ - eval against naive, etc.},
+author = {Chen, Qing and Shipper, Timothy and Khan, Latifur},
+doi = {10.1109/ISI.2010.5484758},
+isbn = {9781424464449},
+journal = {Information Systems Journal},
+keywords = {also,among tweets clustering,classification,cluster impurity,during,extended features,measuring euclidean distance,purer neighbor cluster,selected,tweet mining,we try minimize,wikipedia},
+pages = {141--143},
+publisher = {Ieee},
+title = {{Tweets mining using WIKIPEDIA and impurity cluster measurement}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=5484758},
+year = {2010}
+}
+@book{Cheong2010,
+author = {Cheong, Marc and Lee, Vincent},
+booktitle = {2010 20th International Conference on Pattern Recognition},
+doi = {10.1109/ICPR.2010.765},
+isbn = {978-1-4244-7542-1},
+keywords = {twitter clustering},
+mendeley-tags = {twitter clustering},
+month = aug,
+pages = {3125--3128},
+publisher = {IEEE},
+title = {{A Study on Detecting Patterns in Twitter Intra-topic User and Message Clustering}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=5597282},
+year = {2010}
+}
+@article{Connor2010,
+abstract = {We present TweetMotif, an exploratory search applica- tion for Twitter. Unlike traditional approaches to in- formation retrieval, which present a simple list of mes- sages, TweetMotif groups messages by frequent signif- icant terms a result sets subtopics which facili- tate navigation and drilldown through a faceted search interface. The topic extraction system is based on syn- tactic ltering, language modeling, near-duplicate de- tection, and set cover heuristics. We have used Tweet- Motif to de ate rumors, uncover scams, summarize sentiment, and track political protests in real-time. A demo of TweetMotif, plus its source code, is available at http://tweetmotif.com.},
+annote = { - neat tokenizing and gram'ing of tweets; also good determining of important phrases
+ - does neat merging of topics (each phrase is topic -> then merge via jacquard \& subsets -> represent w/ one label from group)
+ - also remove duplicates by jacard > 65\%},
+author = {Connor, Brendan O and Krieger, Michel and Ahn, David},
+journal = {Artificial Intelligence},
+number = {1},
+pages = {384--385},
+title = {{TweetMotif : Exploratory Search and Topic Summarization for Twitter}},
+url = {http://www.aaai.org/ocs/index.php/ICWSM/ICWSM10/paper/viewPDFInterstitial/1540/1907},
+year = {2010}
+}
+@inproceedings{Hu2008,
+address = {New York, New York, USA},
+annote = { - enhance text clustering bag of words or using Wordnet by building semantics from wikipedia},
+author = {Hu, Jian and Fang, Lujun and Cao, Yang and Zeng, Hua-Jun and Li, Hua and Yang, Qiang and Chen, Zheng},
+booktitle = {Proceedings of the 31st annual international ACM SIGIR conference on Research and development in information retrieval - SIGIR '08},
+doi = {10.1145/1390334.1390367},
+file = {:Users/dolan/Library/Application Support/Mendeley Desktop/Downloaded/Hu et al. - 2008 - Enhancing text clustering by leveraging Wikipedia semantics.pdf:pdf},
+isbn = {9781605581644},
+keywords = {Wikipedia,similarity measure,text clustering,thesaurus},
+month = jul,
+pages = {179},
+publisher = {ACM Press},
+title = {{Enhancing text clustering by leveraging Wikipedia semantics}},
+url = {http://dl.acm.org/citation.cfm?id=1390334.1390367},
+year = {2008}
+}
+@article{Karandikar2010,
+annote = { - topic model on  all words
+ - take tweet, get words as vectors, then use MDS to reduce to two dimensions, then do means on these two dimensions
+ - topic model clustering of tweeters},
+author = {Karandikar, Anand},
+journal = {Work},
+publisher = {University of Maryland},
+title = {{Clustering short status messages : A topic model based approach}},
+url = {http://ebiquity.umbc.edu/get/a/publication/518.pdf},
+year = {2010}
+}
+@inproceedings{Kwak2010,
+abstract = {Twitter, a microblogging service less than three years old, commands more than 41 million users as of July 2009 and is growing fast. Twitter users tweet about any topic within the 140-character limit and follow others to receive their tweets. The goal of this paper is to study the topological characteristics of Twitter and its power as a new medium of information sharing. We have crawled the entire Twitter site and obtained 41.7 million user profiles, 1.47 billion social relations, 4,262 trending topics, and 106 million tweets. In its follower-following topology analysis we have found a non-power-law follower distribution, a short effective diameter, and low reciprocity, which all mark a deviation from known characteristics of human social networks 28. In order to identify influentials on Twitter, we have ranked users by the number of followers and by PageRank and found two rankings to be similar. Ranking by retweets differs from the previous two rankings, indicating a gap in influence inferred from the number of followers and that from the popularity of one's tweets. We have analyzed the tweets of top trending topics and reported on their temporal behavior and user participation. We have classified the trending topics based on the active period and the tweets and show that the majority (over 85\%) of topics are headline news or persistent news in nature. A closer look at retweets reveals that any retweeted tweet is to reach an average of 1,000 users no matter what the number of followers is of the original tweet. Once retweeted, a tweet gets retweeted almost instantly on next hops, signifying fast diffusion of information after the 1st retweet. To the best of our knowledge this work is the first quantitative study on the entire Twittersphere and information diffusion on it.},
+author = {Kwak, Haewoon and Lee, Changhyun and Park, Hosung and Moon, Sue},
+booktitle = {Proceedings of the 19th international conference on World wide web WWW 10},
+doi = {10.1145/1772690.1772751},
+isbn = {9781605587998},
+pages = {591--600},
+publisher = {ACM Press},
+series = {WWW '10},
+title = {{What is Twitter, a social network or a news media?}},
+url = {http://portal.acm.org/citation.cfm?doid=1772690.1772751},
+year = {2010}
+}
+@book{Liu2011,
+author = {Liu, Nathan N and Bay, Clear Water and Kong, Hong and Zhao, Kai},
+booktitle = {Conference on Informatiod Knowledge Management CIKM},
+isbn = {9781450307178},
+keywords = {short text,statistical generative models,unsupervised},
+pages = {775--784},
+publisher = {ACM Press},
+title = {{Transferring Topical Knowledge from Auxiliary Long Texts for Short Text Clustering}},
+year = {2011}
+}
+@article{Rosa2011,
+annote = {unsupervised into topics, compared against fixed topics using hashtags},
+author = {Rosa, Kevin Dela and Shah, Rushin and Lin, Bo and Gershman, Anatole and Frederking, Robert},
+journal = {Corpus},
+keywords = {clustering,microblog analysis,social media,summarization},
+title = {{Topical Clustering of Tweets}},
+url = {http://www.cs.cmu.edu/~kdelaros/sigir-swsm-2011.pdf},
+year = {2011}
+}
+@inproceedings{Stumpf2005,
+annote = {naive bayes along w/ logistic regression, dynamic bayesian networks to predict user actions; includes thresholding as well},
+author = {Stumpf, Simone and Bao, Xinlong and Dragunov, Anton and Dietterich, T G and Herlocker, Jon and Johnsrude, K and Li, Lida and Shen, Jianqiang},
+booktitle = {20th National Conference on Artificial Intelligence AAAI05 Workshop on Human Comprehensible Machine Learning},
+title = {{Predicting user tasks: I know what you're doing}},
+url = {http://scholar.google.com/scholar?hl=en\&btnG=Search\&q=intitle:Predicting+user+tasks:+I+know+what+you're+doing\#0},
+volume = {20th Natio},
+year = {2005}
+}
+@misc{Twitter.com2011,
+    author = {Twitter.com},
+    title = {{Your World, More Connected}},
+    url = {http://blog.twitter.com/2011/08/your-world-more-connected.html},
+    year = {2011}
+}
+@article{Webb2001,
+    abstract = {At first blush, user modeling appears to be a prime candidate for straightforward application of standard machine learning techniques. Observations of the user's behavior can provide training examples that a machine learning system can use to form a model designed to predict future actions. However, user modeling poses a number of challenges for machine learning that have hindered its application in user modeling, including: the need for large data sets; the need for labeled data; concept drift; and computational complexity. This paper examines each of these issues and reviews approaches to resolving them.},
+    annote = {addresses issues w/ user modeling (concept drift, computational complexity, need for labeled data, large data sets)},
+    author = {Webb, Geoffrey I. and Pazzani, Michael J. and Billsus, Daniel},
+    doi = {10.1023/A:1011117102175},
+    issn = {0924-1868},
+    journal = {User Modeling and User-Adapted Interaction},
+    keywords = {Computer Science},
+    month = mar,
+    number = {1},
+    pages = {19--29},
+    publisher = {Springer Netherlands},
+    title = {{Machine Learning for User Modeling}},
+    url = {http://www.springerlink.com/content/rl172m3l46614737/},
+    volume = {11},
+    year = {2001}
+}
+@article{Zhao2011,
+    abstract = {Twitter as a new form of social media can potentially con- tain much useful information, but content analysis on Twitter has not been well studied. In particular, it is not clear whether as an information source Twitter can be simply regarded as a faster news feed that covers mostly the same information as traditional news media. In This paper we empirically compare the content of Twitter with a traditional news medium, New York Times, using unsupervised topic modeling. We use a Twitter-LDA model to discover topics from a representative sample of the entire Twitter.We then use text mining techniques to compare these Twitter topics with topics from New York Times, taking into considera- tion topic categories and types. We also study the relation between the proportions of opinionated tweets and retweets and topic categories and types. Our comparisons show interesting and useful findings for down- stream IR or DM applications.},
+    author = {Zhao, Wayne Xin and Jiang, Jing and Weng, Jianshu and He, Jing and Lim, Ee-Peng},
+    editor = {Clough, Paul and Foley, Colum and Gurrin, Cathal and Jones, Gareth J F and Kraaij, Wessel and Lee, Hyowon and Mudoch, Vanessa},
+    isbn = {9783642201608},
+    journal = {New York},
+    keywords = {microblogging,topic modeling,twitter},
+    pages = {338--349},
+    publisher = {Springer},
+    series = {Lecture Notes in Computer Science},
+    title = {{Comparing Twitter and Traditional Media using Topic Models}},
+    url = {http://www.springerlink.com/index/9614610Q7Q13M4K6.pdf},
+    volume = {6611},
+    year = {2011}
+}
+@article{Shiels2011,
+    author={Shiels, M.},
+    title={Twitter co-founder Jack Dorsey rejoins company},
+    journal={BBC News},
+    date = {28 March 2011},
+    eprint = {http://www.fermentas.com/techinfo/nucleicacids/maplambda.htm},
+    year = {2011}
+}
+@online{Alexa2011,
+    author={Alexa},
+    date = {17 November 2011},
+    title = {Alexa Top 500 Sites on the Web},
+    url = {http://www.alexa.com/topsites},
+    year = {2011}
+}
+@article{Mao2011,
+    author={Mao, Bollen H. and Zeng, X.},
+    title={Twitter mood predicts the stock market},
+    journal={Journal of Computational Science},
+    date = {March 2011},
+    volume={2},
+    number={1},
+    pages={1-8},
+    year = {2011}
+}
+@article{Davidov2010, 
+    title={Enhanced Sentiment Learning Using Twitter Hashtags and Smileys}, 
+    url={http://eprints.pascal-network.org/archive/00007073/}, 
+    number={August}, journal={staffscienceuvanl}, 
+    publisher={Association for Computational Linguistics}, 
+    author={Davidov, Dmitry and Tsur, Oren and Rappoport, Ari}, 
+    year={2010}, 
+    pages={241--249}
+}
+
+@article{Dongen2000, 
+    title={Performance criteria for graph clustering and Markov cluster experiments}, 
+    url={http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.26.9783}, 
+    number={INS-R0012}, 
+    journal={TRINS R0012}, 
+    publisher={Citeseer}, 
+    author={Van Dongen, S}, 
+    year={2000}
+}
+@article{Karypis1998, 
+	title={A Fast and High Quality Multilevel Scheme for Partitioning Irregular Graphs}, 
+	volume={20}, url={http://link.aip.org/link/SJOCE3/v20/i1/p359/s1&Agg=doi}, 
+	number={1}, 
+	journal={SIAM Journal on Scientific Computing}, 
+	publisher={Citeseer}, 
+	author={Karypis, George and Kumar, Vipin}, 
+	year={1998}, 
+	pages={359--392}
+}
+@unpublished{Mazzia2011,
+    title={Suggesting Hashtags on Twitter},
+    url={http://www-personal.umich.edu/~amazzia/pubs/545-final.pdf},
+    author={Mazzia, Allie and Juett, James},
+    year={2011},
+    note={EECS 545 Project, Spring 2011}
+}
