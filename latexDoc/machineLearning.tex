@@ -1,4 +1,4 @@
-\documentclass[12pt]{amsart}
+\documentclass[12pt]{amsart} %amsart
 \usepackage{graphicx}
 \usepackage{subfigure}
 
@@ -8,7 +8,7 @@
 \oddsidemargin -0.04cm   % read Lamport p.163
 \evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
 \textwidth 16.59cm
-\textheight 21.94cm 
+\textheight 21.94cm
 %\pagestyle{empty}       % Uncomment if don't want page numbers
 \parskip 7.2pt           % sets spacing between paragraphs
 %\renewcommand{\baselinestretch}{1.5}  % Uncomment for 1.5 spacing between lines
@@ -19,46 +19,25 @@
 \begin{document}
 
 
-\title{Supervised Prediction of Twitter Posts with Unsupervised Clustering}
-\author{Gregory Handy, Dolan Antenucci, Akshay Modi, Miller Tinkerhess} 
 
-\begin{abstract}
-Abstract goes here
-\end{abstract}
+% including title + abstract + maketitle + introduction
+\input{abstractTitleIntroRelated}
 
 
-\maketitle
+% including solution section 
+\input{ourApproach}
 
 
+% including experiments section
+\input{experiments}
 
-\section{Introduction}
-This is the start.
 
-\subsection{Subsection}
+% including future work, conclusion, references
+\input{futureWorkConclusion} 
 
-%If we want to add a figure this is the code we would use
-%\begin{figure}[tbh]
-%\centering
-%\includegraphics[scale=0.33]{location of figure}
-%\caption{}
-%\label{fig:something}
-%\end{figure}
-
-\section{Clustering Techniques}
-\input{clustering}
-
-\subsection{Another Subsection}
-Sample equation
-\begin{eqnarray}
-    y &=& s_{000} + s_{010} + s_{100} + s_{110} + s_{-100} +s_{-110},   \nonumber\\
-    1-y &=& s_{001} + s_{011} + s_{101} + s_{111} + s_{-101} +s_{-111}. \label{eqn:1-y}
-\end{eqnarray}
-
- This is how you cite stuff \cite{Shiels2011}.   
 
 % including references
 \bibliographystyle{abbrv}
 \bibliography{machineLearning} % requires machineLearning.bib file 
-
 
 \end{document}

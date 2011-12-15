@@ -1,0 +1,48 @@
+\section{Experiments and Results}
+
+\subsection{Clustering}
+As mentioned previously, it decided that our focus would be placed on clustering the top 2,000 most used hashtags. Decreasing this number eliminated the breadth that our clusters would cover; however increasing this number made the preprocessing step intractable. Several trails were performed on a set of 5,000 top used hashtags, without running the preprocessing step, but most of the hashtags grouped into one large cluster, while the rest of the clusters consisted of single hashtags. We believe that this was caused by noisy connections, which inadvertently linked most of the hashtags closely together. This issue is removed in the preprocessing described. 
+
+Upon completion of the preprocessing step, only 1,557 hashtags remained. This provided our clustering algorithms with a 1,557 x 1,557 similarity matrix. Unfortunately, there is no real intuitive way to pick the number of clusters. Spectral clustering does use K-means on the eigenvectors of the Laplacian matrix, which suggests that we could graph the within cluster scatter and find the knee. Unfortunately, for spectral clustering, increasing K increases the dimension of the eigenvectors that are evaluated in K-means. As a result, an increase in K leads to an increase in within cluster scatter. As result, we tested several different values for K, and evaluated the size of the clusters that were formed. A small value for K would result in hashtag clusters that were not indicative of one topic. Picking a large value of K would separate clusters that should actually be in the same group. It was concluded that K=300 provided the best combination of these two features. 
+
+One method of cluster evaluation was to pick out randomly 100 out of the 300 clusters, and evaluate them on a scale of 1 to 5, with 1 representing a cluster that makes no sense, and 5 being a perfect cluster. Factors that go into this rating include size of the cluster, number of matching hashtags the relate to the topics, and relation of topics, if more than one topic arises. Some examples of clusters and their ratings are given below
+
+\begin{verbatim} 
+bears beatles chargers cowboys fantasyfootball jets nyg packers panthers 
+patriots raiders steelers vick vikings --- 5 (collection of all football teams)
+
+amazing comic comics cool funny humor strange voss webcomic webcomics weird 
+--- 3 (clearly comics are represented, but there are random words such as 
+amazing and weird)
+
+bangladesh car classifieds fatpeoplearesexier mobile motorcycle motorsport 
+nokia shopping used --- 1 (list looks very random)
+
+\end{verbatim}
+
+
+\begin{table}[ht]
+\caption{Ratings for the Clusters}
+\centering
+\begin{tabular}{c c c c c c c}
+\hline\hline
+Method & 1 & 2 & 3 & 4 & 5 & Average \\ [0.5ex] % inserts table %heading
+\hline
+Spectral & 21 & 6 & 10 & 21 & 35 & 3.23\\
+\hline
+Normalized Spectral & 36 & 7 & 8 & 15 & 34 & 3.04 \\
+\hline
+METIS & 30 & 13 & 13 & 13 & 15 & 2.22 \\[1ex]
+\hline
+\end{tabular}
+\label{table:rating}
+\end{table}
+
+
+Its clear from the table that spectral clusters performs the best, with normalized spectral close behind. For normalized spectral, its interesting to note that the clusters were found around two the extremes, with not many scoring the middle values. METIS had the additional issue that it contained many clusters that should have been clustered together. For example, it contained 5 clusters of baseball teams, whereas the spectral methods grouped these teams into the same cluster. This implies that the clusters created by the spectral method would be more useful in identifying the big topics readily. Its also possible the METIS would avoid this issue with K was chosen to be a smaller number.
+
+ 
+
+\subsection{Classification}
+
+\subsection{Discussion}
