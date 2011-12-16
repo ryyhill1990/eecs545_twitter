@@ -1,14 +1,21 @@
+% USAGE: copy contents of this file into futureWorkConclusion.tex
+
+
 \section{Future Work}
 
 \subsection{Clustering}
-Although we have shown that our clustering method has promise, there are a number research points that can be explored to improve the method. During part of the preprocessing step, as illustrated in Figure 1, the undirected graph is transformed to a directed graph that has the properties of a Markov chain. It would therefore be possible to perform a Markov Cluster Algorithm as proposed by Dongen \cite{Dongen2000}. It possible that this algorithm would be less effected by noise, which would eliminate the preprocessing step and allow a large number of hashtags to be clustered. Parallelizing the preprocessing step would also allow for this possibility. 
+We have shown that our clustering method has promise; we believe the method could be further improved. During the preprocessing step illustrated in Figure 1 the undirected graph is transformed to a directed graph that has the properties of a Markov chain. It would therefore be possible to perform a Markov Cluster Algorithm as proposed by Dongen \cite{Dongen2000}. It is possible that this algorithm would be less affected by noise, which would reduce the need for the preprocessing step and allow a larger number of hashtags to be clustered. Parallelizing the preprocessing step could also allow us to cluster a larger number of hashtags.
 
-A better way of choosing the number of clusters should also be examined. Further, increasing K was meant to increase the number of topics the clusters represented. However, instead of splitting large clusters apart into smaller topics, it would simply pull one or two hashtags out at a time. This was most likely do to the fact that K-means was always done on the full graph. It would potentially be better to first apply K-means to the whole set, and have K equal a small number. Then for each of these clusters, perform a localized K-means. This method should avoid the issue of creating clusters that are too small in size. 
+There may be a better way to pick the number of clusters. Increasing K was meant to increase the number of topics the clusters represented. However, instead of splitting large clusters apart into smaller topics, our algorithm would often pull one or two hashtags out at a time. This was most likely because $k$-means was always done on the full graph. It could be better to first apply $k$-means to the whole set, and have $k$ be a small number. Then for each of these clusters, perform localized $k$-means. This method could avoid the issue of creating clusters that are too small in size. 
 
+\subsection{Classification}
+We discovered that the performance of classification algorithms improves vastly if we shorten the time frame from which the data is drawn. It would be worth exploring the effects of introducing temporal information into our feature vectors since the importance of some hashtags seems to be limited to specific times.
 
-\subsection{Classification/Prediction/What else can we do with this?}
-Future work with classifying and prediction using our cluster data focuses on three areas.  First, 
-
+Extending the co-occurrence idea from clustering, it could be worth exploring clustering of non-hashtag terms using a similarly defined measure and performing classification using these clusters of terms. This would result in lower-dimensional feature vectors, possibly making learning algorithms tractable without the use of PCA. Using this co-occurrence data might also be useful in classification of documents from different domains.
 
 \section{Conclusion}
-In conclusion, we rock.
+With a growing, diverse membership and masses of new information being added daily \cite{Holt2011}, opportunities to find useful information from Twitter will also grow. We have presented two new approaches that help unlock this information. The first focuses on clustering hashtags into meaningful topics; the second uses these clusters to identify the topic of tweets through classification. We also present two novel similarity measures that could be useful beyond the scope of the methods we examined. 
+
+
+\section{Project Member Contributions}
+All team members participated in data processing early in the project.  Most large scale data crunching was performed by Dolan. Most theory behind our project was a team effort.  Our preliminary research into hashtag usage prediction was co-developed by Akshay and Miller, working on naive Bayes and LDA, respectively.  Classifying hashtags based on tweets was primarily coded by Akshay and Miller, with Dolan assisting with execution. Exploration into and coding of different clustering techniques, and the development of the similarity measure and filtering was handled by Greg. Clustering analysis was done by Dolan and Greg. Miller worked on the trigram cosine similarity metric. Writing the paper was a team effort.

@@ -1,19 +1,29 @@
 \documentclass[12pt]{amsart} %amsart
 \usepackage{graphicx}
 \usepackage{subfigure}
+\usepackage{algorithmic}
 
 % below from
 % http://www.pages.drexel.edu/~pyo22/students/latexRelated/latexTutorial.html
-\topmargin -1.5cm        % read Lamport p.163
-\oddsidemargin -0.04cm   % read Lamport p.163
-\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
-\textwidth 16.59cm
-\textheight 21.94cm
+%\topmargin -1.5cm        % read Lamport p.163
+%\oddsidemargin -0.04cm   % read Lamport p.163
+%\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+%\textwidth 16.59cm
+%\textheight 21.94cm
 %\pagestyle{empty}       % Uncomment if don't want page numbers
-\parskip 7.2pt           % sets spacing between paragraphs
-%\renewcommand{\baselinestretch}{1.5}  % Uncomment for 1.5 spacing between lines
+%\parskip 7.2pt           % sets spacing between paragraphs
+% 
+\topmargin 0in
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\textheight 8.5in
+\parskip 7.2pt       % sets spacing between paragraphs
 \parindent 0pt       % sets leading space for paragraphs
- 
+
+\footnotesep 10pt           % baseline skip for fn's 1st line
+\headheight 0.1in           % make room for header
+\headsep 0.1in                  % modest header separation
 
 
 \begin{document}
@@ -37,7 +47,8 @@
 
 
 % including references
-\bibliographystyle{abbrv}
+% different styles: http://www.cs.stir.ac.uk/~kjt/software/latex/showbst.html
+\bibliographystyle{is-unsrt} % previously abrev
 \bibliography{machineLearning} % requires machineLearning.bib file 
 
 \end{document}
