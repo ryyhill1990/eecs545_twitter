@@ -1,23 +1,93 @@
-% USAGE: copy contents of this file into futureWorkConclusion.tex
+% USAGE: copy contents of this file into experiments.tex
 
 
-\section{Future Work}
+\section{Experiments and Results}
 
 \subsection{Clustering}
-We have shown that our clustering method has promise; we believe the method could be further improved. During the preprocessing step illustrated in Figure 1 the undirected graph is transformed to a directed graph that has the properties of a Markov chain. It would therefore be possible to perform a Markov Cluster Algorithm as proposed by Dongen \cite{Dongen2000}. It is possible that this algorithm would be less affected by noise, which would reduce the need for the preprocessing step and allow a larger number of hashtags to be clustered. Parallelizing the preprocessing step could also allow us to cluster a larger number of hashtags.
+We focused on clustering the top 2,000 most used hashtags. Decreasing this number would reduce the breadth of our clusters’ coverage; on the other hand, increasing this number made the similiarity filtering step intractable. We performed several trials on the 5,000 most frequently used hashtags without running the step, but most of the hashtags ended up in one large cluster while the rest of the clusters consisted of single hashtags. We believe that this was caused by noisy connections, which inadvertently linked most of the hashtags closely together. This issue is removed during the filtering described earlier.
 
-There may be a better way to pick the number of clusters. Increasing K was meant to increase the number of topics the clusters represented. However, instead of splitting large clusters apart into smaller topics, our algorithm would often pull one or two hashtags out at a time. This was most likely because $k$-means was always done on the full graph. It could be better to first apply $k$-means to the whole set, and have $k$ be a small number. Then for each of these clusters, perform localized $k$-means. This method could avoid the issue of creating clusters that are too small in size. 
+Only 1,557 hashtags remained after filtering. Unfortunately, there is no intuitive way to pick the correct number of clusters to generate. Spectral clustering does use $k$-means on the eigenvectors of the Laplacian matrix, which suggests that we could graph the within-cluster scatter and find the knee. Unfortunately, for spectral clustering, increasing $k$ increases the dimension of the eigenvectors that are evaluated in $k$-means. As a result, an increase in $k$ leads to an increase in within-cluster scatter. We tested several different values for $k$, and evaluated the size of the clusters that were formed. A small value for $k$ resulted in hashtag clusters that were not indicative of one single topic. Picking a large value of $k$ separated clusters that should actually be in the same group. We decided that $k$=300 provided the best trade-off between these two problems. 
+
+In order to evaluate the clustering techniques we randomly selected 100 of the 300 clusters and score them manually on a scale of 1 to 5, with 1 representing a cluster that makes no sense and 5 being a perfect cluster. Factors that go into this rating include size of the cluster, number of matching hashtags that relate to the topics, and relation of topics if more than one topic arises. Some examples of clusters and their ratings are given below:
+
+\begin{verbatim} 
+bears beatles chargers cowboys fantasyfootball jets nyg packers panthers 
+patriots raiders steelers vick vikings
+Score: 5 (collection of all football teams)
+amazing comic comics cool funny humor strange voss webcomic webcomics weird 
+Score: 3 (clearly comics are represented, but there are random words such as 
+amazing and weird)
+crnc failedchildrensbooktitles fishy grizzly obamacare waterloo 
+Score: 1 (list looks simply random)
+\end{verbatim}
+
+
+\begin{table}[ht]
+\caption{Ratings for the Clusters}
+\centering
+\begin{tabular}{c c c c c c c}
+\hline\hline
+Method & 1 & 2 & 3 & 4 & 5 & Average \\ [0.5ex] % inserts table %heading
+\hline
+Spectral & 21 & 6 & 10 & 21 & 35 & 3.23\\
+\hline
+Normalized Spectral & 36 & 7 & 8 & 15 & 34 & 3.04 \\
+\hline
+METIS & 30 & 13 & 13 & 13 & 15 & 2.22 \\[1ex]
+\hline
+\end{tabular}
+\label{table:rating}
+\end{table}
+
+
+It is clear from Table 1 that spectral clusters performs the best, with normalized spectral close behind. Notably, normalized spectral tended to score around the two extremes, with not many scores in the middle values. METIS contained many clusters that should have been clustered together. For example, it contained five clusters of baseball teams, whereas the spectral methods grouped these teams into the same cluster. This implies that the clusters created by the spectral method would be more useful in identifying topics comprising may hashtags. It's also possible that METIS would avoid this issue if $k$ was chosen to be a smaller number.
+
+ 
 
 \subsection{Classification}
-We discovered that the performance of classification algorithms improves vastly if we shorten the time frame from which the data is drawn. It would be worth exploring the effects of introducing temporal information into our feature vectors since the importance of some hashtags seems to be limited to specific times.
+We split our data into 90$\%$ training data and 10$\%$ testing data. We do not perform cross-validation; however, anecdotally, results did not vary by more than a couple of percentage point over several different divisions of the data.
 
-Extending the co-occurrence idea from clustering, it could be worth exploring clustering of non-hashtag terms using a similarly defined measure and performing classification using these clusters of terms. This would result in lower-dimensional feature vectors, possibly making learning algorithms tractable without the use of PCA. Using this co-occurrence data might also be useful in classification of documents from different domains.
+We use majority-vote classification accuracy as a baseline to measure our performance against. The majority-vote accuracy is simply the percentage of the data points whose cluster is the most common cluster among the data points.
 
-\section{Conclusion}
-With a growing, diverse membership and masses of new information being added daily \cite{Holt2011}, opportunities to find useful information from Twitter will also grow. We have presented two new approaches that help unlock this information. The first focuses on clustering hashtags into meaningful topics; the second uses these clusters to identify the topic of tweets through classification. We also present two novel similarity measures that could be useful beyond the scope of the methods we examined. 
+\begin{table}[ht]
+\caption{Classification Performance}
+\centering
+\begin{tabular}{c c c c c c}
+\hline\hline
+& Bern. N.B.
+& LDA
+& SVM
+& Majority
+& SVM, no PCA \\ [0.5ex]
+\hline
+Spectral 
+& 26.5 & 18.3 & 25.1 & 11.7 &11.8 \\
+\hline
+Spectral w/ Cos. Sim.
+& 26.5 & 18.6 & 24.1 & 11.1 & 10.8 \\
+\hline
+Norm. Spectral
+& 21.4 & 17.2 & 25.2 & 17.9 & 17.9 \\
+\hline
+Norm. Spectral w/ Cos. Sim.
+& 22.4 & 17.3 & 25.1 & 17.4 & 17.6 \\
+\hline
+METIS
+& 14.8 & 11.8 & 13.8 & 4.1 & 4.1 \\
+\hline
+METIS w/ Cos. Sim.
+& 14.9 & 12.1 & 14.1 & 3.9 & 3.9 \\
+\hline
+\end{tabular}
+\label{table:rating}
+\end{table}
 
-While we are pleased with the preliminary findings of our clustering and classification methods, our project hit some bumps along the way, causing us to deviate from our initial path. Initially, we attempted to cluster hashtags based on string similarity and not on semantic similarities. We found that the clusters created using these metrics were not very meaningful. This makes sense in hindsight since there are no rules of hashtag usage -- twitter users make a very diverse use of them, and there are many unique hashtags that are semantically similar while not being structurally similar. We also initially believed we would be able predict what a certain user is going to tweet about next based on his previously used hashtags. Instead, we found that many users preferred a very small set of unique hashtags, which made prediction more reliable, but much less meaningful. These roadblocks led us into our current project plan, which ended up being a promising direction for future work.
+\subsection{Discussion}
 
+Over all clustering techniques, all classification techniques using PCA-reduced data perform better than majority vote; SVM without PCA reduction performs no better than majority vote. This shows that dimensionality reduction serves two purposes: it makes the problem computationally feasible, and it improves performance by capturing regularities in the data.
 
-\section{Project Member Contributions}
-All team members participated in data processing early in the project.  Most theory behind our project was a team effort.  Large scale data processing was handled by Dolan. Our preliminary research into hashtag usage prediction was co-developed by Akshay and Miller, working on naive Bayes and LDA, respectively.  Classifying hashtags based on tweets was primarily coded by Akshay and Miller, with Dolan assisting with execution. Exploration into and coding of different clustering techniques, and the development of the similarity measure and filtering was handled by Greg. Clustering analysis was done by Dolan and Greg. Miller worked on the trigram cosine similarity metric. Writing the paper was a team effort.
+Our data show that the classification techniques performed similarly well when given clusters that included hashtags added via cosine-similarity measures as when they did not. This suggests that the cosine similarity technique allows us to expand the breadth of clustering without negatively affecting the semantic cohesiveness of the clusters.
+
+Although all three classification techniques over PCA-reduced data perform better than majority vote, the Bernoulli Naive Bayes and SVM classifiers perform better than LDA over all clustering techniques. This suggests that when PCA reduction is applied the data points are not easily linearly separable, but that limitation may be overcome in the case of Bernoulli Naive Bayes due to the binarization of the data, or in the case of the SVM classifier by using a non-linear kernel. 
+
+Under all classification techniques, data clustered by the METIS algorithm had a lower classification success rate than all other clustering algorithms. In our manual examination of the clusters produced by each technique, we saw that METIS produces clusters that seem less semantically cohesive than the other techniques. We conjecture that classification accuracy is therefore an indicator of the quality of a clustering technique. Alternatively, METIS's worse performance may be a result of the distribution of tags to clusters; the lower accuracy of the majority vote classifier indicates that hashtags are more evenly spread among clusters under METIS than under the other techniques, which may result in more difficulty performing classification regardless of the semantic cohesiveness of the clusters.
