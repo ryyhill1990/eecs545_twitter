@@ -39,3 +39,9 @@ Step 9:
 Run finalProgram.py (need finalCluster folder)
 
 We're done!
+
+
+# Appendix A: generating data for Graphviz
+mkdir textFiles/graphs
+cat textFiles/clusters.txt | ./get_graph_data.py 0.1 > textFiles/graphs/graph-data.dot
+fdp -Tpdf textFiles/graphs/graph-data.dot -o textFiles/graphs/graph10.pdf
