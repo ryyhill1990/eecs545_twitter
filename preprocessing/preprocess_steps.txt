@@ -1,48 +1,95 @@
-# getting all july tweets with hashtags
-A = LOAD '/data/twitter/tweets2009-07.csv' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
-B = FILTER A BY post MATCHES '.*#[^\\s]+.*';
-STORE B INTO 'output/julyTaggedTweets';
+-- getting all july tweets with hashtags
+A = LOAD 'twitter/*' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
+B = FILTER A BY post MATCHES '.*#[^\\s]+.*' AND SUBSTRING(date, 0, 7) == '2009-07';
+STORE B INTO 'output/july/TaggedTweets';
 
 # preprocess tweets (lowercase, remove odd characters)
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
      -D mapred.reduce.tasks=0 \
      -file clean_tweet.py \
      -mapper clean_tweet.py \
-     -input output/julyTaggedTweets/part* \
-     -output output/julyTaggedTweetsClean
+     -input output/july/TaggedTweets/part* \
+     -output output/july/TaggedTweetsClean
 
 # grab all hashtag -> term pairs <hashtag, term, date, user>
 hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
      -D mapred.reduce.tasks=0 \
      -file hashtag_terms.py \
      -mapper hashtag_terms.py \
-     -input output/julyTaggedTweetsClean/part* \
-     -output output/julyTagTerms
+     -input output/july/TaggedTweetsClean/part* \
+     -output output/july/TagTerms
 
 # grab all user-date-hashtag pairs <user, date, hashtag>
 A = LOAD 'output/julyTaggedTweetsClean/part*' USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
 B = FOREACH A GENERATE user, date, FLATTEN(TOKENIZE(post)) as token;
 C = FILTER B BY token MATCHES '(#[^\\s]+)';
-STORE C INTO 'output/julyUserHashUses';
+STORE C INTO 'output/july/UserHashUses';
 
 # grab counts of hashtags used by hashtag <hashtag, frequency>
 A = LOAD 'output/julyUserHashUses/part*' USING PigStorage('\t') AS (user:chararray, date:chararray, hashtag:chararray);
 B = GROUP A BY hashtag;
 C = FOREACH B GENERATE group, COUNT(A) AS hash_count;
 D = ORDER C BY hash_count DESC;
-STORE D INTO 'output/julyTagUseCounts';
+STORE D INTO 'output/july/TagUseCounts';
 
 # grabbing co-occurrences of top 200 tags
 #TODO: avoid duplicate co-occurrences
-tag_counts = LOAD 'output/julyTagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
+tag_counts = LOAD 'output/july/TagUseCounts/part*' USING PigStorage('\t') AS (hashtag:chararray, hash_count:long);
 tag_counts_ordered = ORDER tag_counts BY hash_count DESC;
 top_tags = LIMIT tag_counts_ordered 200;
-tag_terms = LOAD 'output/julyTagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
+tag_terms = LOAD 'output/july/TagTerms/part*' USING PigStorage('\t') AS (hashtag:chararray, term:chararray, date:chararray, user:chararray);
 tag_tags = FILTER tag_terms BY term MATCHES '^#.*$';
 top_tag_tags = JOIN tag_tags BY hashtag, top_tags by hashtag USING 'skewed';
 ttt_group = GROUP top_tag_tags BY ($0, $1);
 ttt_counts = FOREACH ttt_group GENERATE FLATTEN(group), COUNT(top_tag_tags);
-STORE ttt_counts INTO 'output/julyTop200TagCooccurCounts';
+STORE ttt_counts INTO 'output/july/Top200TagCooccurCounts';
+
+
+######## 100k random tweets' terms w/ freq > 5 ##########
+-- loading random id adder
+DEFINE rand_id_adder `add_rand_id_to_tweet.py`
+    SHIP('/home/dol/eecs545_twitter/preprocessing/add_rand_id_to_tweet.py');
+
+-- grabbing full ngram signal results
+tweets = LOAD '/user/dol/output/july/TaggedTweetsClean/part*' 
+         AS (date:chararray, user:chararray, post:chararray);
+
+-- search results through streaming job
+tweets_w_id = STREAM tweets THROUGH rand_id_adder 
+          AS (id:chararray, date:chararray, user:chararray, post:chararray);
+          
+-- sorting results and returning just ngram and correlation
+all_rand_tweets = ORDER tweets_w_id by id;
+limit_rand_tweets = LIMIT all_rand_tweets 100000;
+rand_tweets = FOREACH limit_rand_tweets GENERATE date, user, post;
+
+
+-- list of distinct terms in first 1mil tweets
+tokened_tweets = FOREACH rand_tweets GENERATE FLATTEN(TOKENIZE(post)) as token;
+term_groups = GROUP tokened_tweets BY token;
+term_freqs = FOREACH term_groups GENERATE group AS term, COUNT(tokened_tweets) AS freq;
+common_term_freqs = FILTER term_freqs BY freq >= 5;
+common_terms = FOREACH common_term_freqs GENERATE term;
+STORE common_terms INTO 'output/july/uniqueTermsRand100k';
+
+
+-- loading tweet-terms-mapper
+DEFINE tweet_terms_mapper `tweet_terms_mapper.py`
+    SHIP('/home/dol/eecs545_twitter/preprocessing/tweet_terms_mapper.py')
+    CACHE('/user/dol/output/july/uniqueTermsRand100k/part-r-00000#tweet_terms.txt'); 
+
+-- storing tweet terms data
+final = STREAM rand_tweets THROUGH tweet_terms_mapper 
+        AS (date:chararray, user:chararray, term_ids:chararray, hashtag_ids:chararray);
+STORE final INTO 'output/july/100kTweetTermsRand';
+######## 100k random tweets' terms ##########
+
+
+
+
+
+
+
 
 
 ####################
@@ -235,7 +282,7 @@ ttt_counts_final = ORDER ttt_counts_filtered BY toptag, freq DESC;
 STORE ttt_counts_final INTO 'output/julyAug/Top200TagCooccurCounts';
 
 
--------------- NOT USED ANYMORE ---------
+######## 100k non-random tweets' terms ##########
 # grabbing 100k tweets
 A = LOAD 'output/julyAug/TaggedTweetsClean/part*' 
     USING PigStorage('\t') AS (date:chararray, user:chararray, post:chararray);
@@ -257,11 +304,93 @@ hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming*.jar \
      -mapper tweet_terms_mapper.py \
      -input output/julyAug/100kTweets/part* \
      -output output/julyAug/100kTweetTerms
----------- NOT USED ANYMORE -------------------
+######## 100k non-random tweets' terms ##########
 
 
-# generating random tweet data
-pig preprocessing/gen_rand_classify_data.pig
+
+######## 100k random tweets' terms ##########
+-- loading random id adder
+DEFINE rand_id_adder `add_rand_id_to_tweet.py`
+    SHIP('/home/dol/eecs545_twitter/preprocessing/add_rand_id_to_tweet.py');
+
+-- grabbing full ngram signal results
+tweets = LOAD '/user/dol/output/julyAug/TaggedTweetsClean/part*' 
+         AS (date:chararray, user:chararray, post:chararray);
+
+-- search results through streaming job
+tweets_w_id = STREAM tweets THROUGH rand_id_adder 
+          AS (id:chararray, date:chararray, user:chararray, post:chararray);
+          
+-- sorting results and returning just ngram and correlation
+all_rand_tweets = ORDER tweets_w_id by id;
+limit_rand_tweets = LIMIT all_rand_tweets 100000;
+rand_tweets = FOREACH limit_rand_tweets GENERATE date, user, post;
+
+
+-- list of distinct terms in first 100k tweets
+tokened_tweets = FOREACH rand_tweets GENERATE FLATTEN(TOKENIZE(post)) as token;
+unique_terms = DISTINCT tokened_tweets;
+STORE unique_terms INTO 'output/julyAug/uniqueTermsRand';
+
+
+-- loading tweet-terms-mapper
+DEFINE tweet_terms_mapper `tweet_terms_mapper.py`
+    SHIP('/home/dol/eecs545_twitter/preprocessing/tweet_terms_mapper.py')
+    CACHE('/user/dol/output/julyAug/uniqueTermsRand/part-r-00000#tweet_terms.txt'); 
+
+-- storing tweet terms data
+final = STREAM rand_tweets THROUGH tweet_terms_mapper 
+        AS (date:chararray, user:chararray, term_ids:chararray, hashtag_ids:chararray);
+STORE final INTO 'output/julyAug/100kTweetTermsRand';
+######## 100k random tweets' terms ##########
+
+
+
+
+
+
+
+
+######## 1mil random tweets' terms w/ freq > 5 ##########
+-- loading random id adder
+DEFINE rand_id_adder `add_rand_id_to_tweet.py`
+    SHIP('/home/dol/eecs545_twitter/preprocessing/add_rand_id_to_tweet.py');
+
+-- grabbing full ngram signal results
+tweets = LOAD '/user/dol/output/julyAug/TaggedTweetsClean/part*' 
+         AS (date:chararray, user:chararray, post:chararray);
+
+-- search results through streaming job
+tweets_w_id = STREAM tweets THROUGH rand_id_adder 
+          AS (id:chararray, date:chararray, user:chararray, post:chararray);
+          
+-- sorting results and returning just ngram and correlation
+all_rand_tweets = ORDER tweets_w_id by id;
+limit_rand_tweets = LIMIT all_rand_tweets 1000000;
+rand_tweets = FOREACH limit_rand_tweets GENERATE date, user, post;
+
+
+-- list of distinct terms in first 1mil tweets
+tokened_tweets = FOREACH rand_tweets GENERATE FLATTEN(TOKENIZE(post)) as token;
+term_groups = GROUP tokened_tweets BY token;
+term_freqs = FOREACH term_groups GENERATE group AS term, COUNT(tokened_tweets) AS freq;
+common_term_freqs = FILTER term_freqs BY freq >= 5;
+common_terms = FOREACH common_term_freqs GENERATE term;
+STORE common_terms INTO 'output/julyAug/uniqueTermsRand1M';
+
+
+-- loading tweet-terms-mapper
+DEFINE tweet_terms_mapper `tweet_terms_mapper.py`
+    SHIP('/home/dol/eecs545_twitter/preprocessing/tweet_terms_mapper.py')
+    CACHE('/user/dol/output/julyAug/uniqueTermsRand1M/part-r-00000#tweet_terms.txt'); 
+
+-- storing tweet terms data
+final = STREAM rand_tweets THROUGH tweet_terms_mapper 
+        AS (date:chararray, user:chararray, term_ids:chararray, hashtag_ids:chararray);
+STORE final INTO 'output/julyAug/1MTweetTermsRand';
+######## 1mil random tweets' terms ##########
+
+
 
 
 
